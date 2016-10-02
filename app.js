@@ -13,7 +13,7 @@ var db = monk('localhost:27017/allgaeu');
 // Define the components of the app
 var quiz = require('./routes/index');
 var session = require('./routes/session');
-var admin = require('./routes/admin');
+var analytics = require('./routes/analytics');
 
 var app = express();
 
@@ -37,7 +37,7 @@ app.use(function(req,res,next){
 // Attach components to URLs
 app.use('/', quiz);
 app.use('/session', session);
-app.use('/admin', admin);
+app.use('/analytics', analytics);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
