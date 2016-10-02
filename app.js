@@ -5,8 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+// Database setup
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/allgaeu');
+
+// Define the components of the app
+var quiz = require('./routes/index');
+var session = require('./routes/session');
+var admin = require('./routes/admin');
 
 var app = express();
 
@@ -22,8 +29,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use(function(req,res,next){
+  req.db = db;
+  next();
+});
+
+// Attach components to URLs
+app.use('/', quiz);
+app.use('/session', session);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
