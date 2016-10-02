@@ -2,7 +2,10 @@ var express = require('express');
 var md5 = require('md5');
 var router = express.Router();
 
-/* GET home page. */
+/** Index route
+ *  With each call of this route a unique hash is generated and
+ *  stored in the database. These hashes are used for authentication
+ *  in the Session API. */
 router.get('/', function(req, res) {
   var db = req.db;
   var hashCollection = db.get('sessions.hashes');
