@@ -1,4 +1,5 @@
 var express = require('express');
+var md5 = require('md5');
 var router = express.Router();
 
 /* GET home page. */
@@ -6,7 +7,7 @@ router.get('/', function(req, res) {
   var db = req.db;
   var hashCollection = db.get('sessions.hashes');
   var hashToInsert = {
-    hash: "woieusdf", // TODO replace with actual hash
+    hash: md5((new Date()).valueOf().toString() + Math.random().toString()),
     creationDate: new Date()
   };
   hashCollection.insert(hashToInsert, {}, function(err,result){
