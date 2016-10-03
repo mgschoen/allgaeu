@@ -2,14 +2,6 @@ var express = require('express');
 var md5 = require('md5');
 var router = express.Router();
 
-function jsonError (message) {
-  var error = {
-    'success': false,
-    'message': message
-  };
-  return error;
-}
-
 // POST: No signature provided
 router.post('/', function(req, res) {
   res.send('Authentication failed');
@@ -100,7 +92,7 @@ router.post('/:sig', function(req, res) {
       } else {
 
         // Signature not found
-        console.error('[ERROR] Authentication attempt failed: Hash ' + submittedSignature + ' was not found.');
+        console.error('[ERROR] Authentication attempt failed: Signature ' + submittedSignature + ' was not found.');
         res.json(jsonError('Signature incorrect, authentication failed'));
         return false;
       }
@@ -113,4 +105,35 @@ router.post('/:sig', function(req, res) {
   });
 });
 
-module.exports = router;
+var jsonError  = function (message) {
+  var error = {
+    'success': false,
+    'message': message
+  };
+  return error;
+};
+
+var insertHash = function (hashCollection, individualString, callback) {
+  var ticket = md5((new Date()).valueOf().toString() + Math.random().toString());
+  var signature = md5(ticket + individualString);
+  var hash = {
+    'creationDate': new Date(),
+    'signature': signature,
+    'ticket': ticket
+  };
+  hashCollection.insert(hash, function (err) {
+    if (err === null) {
+      callback(null, hash);
+    } else {
+      var error = {
+        'msg': 'Failed to write to database',
+      };
+      callback(error, hash);
+    }
+  });
+};
+
+module.exports = {
+  'router': router,
+  'insertHash': insertHash
+};

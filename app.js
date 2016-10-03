@@ -38,7 +38,7 @@ app.use(function(req,res,next){
 // Attach components to URLs
 app.use('/', quiz);
 app.use('/session', session);
-app.use('/session/auth', auth);
+app.use('/session/auth', auth.router);
 app.use('/analytics', analytics);
 
 // catch 404 and forward to error handler

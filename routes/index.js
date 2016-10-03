@@ -10,23 +10,18 @@ var router = express.Router();
 router.get('/', function(req, res) {
   var db = req.db;
   var hashCollection = db.get('sessions.hashes');
-  var ticket = md5((new Date()).valueOf().toString() + Math.random().toString());
-  var signature = md5(ticket + req.headers['user-agent']);
-  var hashToInsert = {
-    'ticket': ticket,
-    'creationDate': new Date(),
-    'signature': signature
-  };
-  console.log(hashToInsert);
-  hashCollection.insert(hashToInsert, {}, function(err){
+  auth.insertHash(hashCollection, req.headers['user-agent'], function(err,hash){
     if (err === null) {
       res.render('index', {
         title: 'Express',
-        apiTicket: hashToInsert.ticket
+        apiTicket: hash.ticket
       });
     } else {
-      console.log(err);
-      return false;
+      console.error('[ERROR] ' + err.message);
+      res.render('error', {
+        message: err.message,
+        error: {}
+      });
     }
   });
 });
