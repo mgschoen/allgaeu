@@ -7,7 +7,13 @@ router.post('/', function(req, res) {
   res.send('Authentication failed');
 });
 
-
+/** Authentication route for Session API.
+ *  If the client submits a correct signature to this route,
+ *  an access token is generated, stored and returned to the
+ *  client.
+ *  For more information on the authentication process see
+ *  the documentation.
+ */
 router.post('/:sig', function(req, res) {
 
   var db = req.db;
@@ -105,14 +111,12 @@ router.post('/:sig', function(req, res) {
   });
 });
 
-var jsonError  = function (message) {
-  var error = {
-    'success': false,
-    'message': message
-  };
-  return error;
-};
-
+/** Creates a new hash consisting of ticket, signature and timestamp
+ *  and insert it to the database. This method is exported.
+ * @param hashCollection - monk collection object
+ * @param individualString - string that together with the ticket gets hashed to the signature
+ * @param callback - function to execute when insertion was performed
+ */
 var insertHash = function (hashCollection, individualString, callback) {
   var ticket = md5((new Date()).valueOf().toString() + Math.random().toString());
   var signature = md5(ticket + individualString);
@@ -131,6 +135,15 @@ var insertHash = function (hashCollection, individualString, callback) {
       callback(error, hash);
     }
   });
+};
+
+// Shorthand for generating a json error object
+var jsonError  = function (message) {
+  var error = {
+    'success': false,
+    'message': message
+  };
+  return error;
 };
 
 module.exports = {
