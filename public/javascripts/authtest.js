@@ -2,7 +2,7 @@ $(function(){
   var authHash = $('#wrapper').attr('data-hash');
   $.ajax({
     method: 'POST',
-    url: '/session/abc', //+ authHash + '/',
+    url: '/session/' + authHash + '/',
     data: {
       key: 'value'
     }

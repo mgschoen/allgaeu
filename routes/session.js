@@ -16,40 +16,55 @@ router.post('/:hash', function(req, res) {
     'hash': submittedHash
   }, function(e,result){
 
-    console.log("e: ");
-    console.log(e);
-    console.log("result: ");
-    console.log(result);
-
     if (e === null) {
+
       // Is hash unique?
       if (result.length === 1) {
 
-        // Remove used hash from collection
-        hashCollection.remove({'hash': submittedHash}, function(err){
-          if (err === null) {
+        // Determine time passed since hash creation
+        var hashCreationDate = result[0].creationDate.valueOf();
+        var now = new Date().valueOf();
+        if ((now - hashCreationDate) < 60000) {
 
-            // Positive response
-            res.send('Authentication success, hash ' + submittedHash + ' consumed');
-          } else {
+          // Remove used hash from collection
+          hashCollection.remove({'hash': submittedHash}, function (err) {
+            if (err === null) {
 
-            // Removing failed
-            console.error('[ERROR] Error removing hash ' + submittedHash + ' from hash collection');
-            return false;
-          }
-        });
-      } else if (result.length > 1) {
+              // Positive response
+              res.send('Authentication success, hash ' + submittedHash + ' consumed');
+              return true;
+            } else {
+
+              // Removing failed
+              console.error('[ERROR] Error removing hash ' + submittedHash + ' from hash collection');
+              return false;
+            }
+          });
+
+        } else {
+
+          // Hash timed out
+          console.error('[ERROR] Hash ' + submittedHash + ' has already timed out. Incoming connection refused.');
+          res.send('Connection timed out, authentication failed');
+          return false;
+        }
+      }
+       else if (result.length > 1) {
 
         // Hash not unique
         console.error('[ERROR] Hash ' + submittedHash + ' is not unique!');
         return false;
       } else {
 
+        // Hash not found
         console.error('[ERROR] Authentication attempt failed: Hash ' + submittedHash + ' was not found.');
         res.send('Hash incorrect, authentication failed');
         return false;
       }
     } else {
+
+      // Other error
+      console.error('[ERROR] ' + e.message);
       res.send(e.message);
     }
   });
