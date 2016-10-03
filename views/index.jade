@@ -3,8 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  p Trying Hash #{authHash}...
-  #wrapper(data-hash='#{authHash}')
+  p Trying Hash #{apiTicket}...
+  #wrapper(data-api-ticket='#{apiTicket}')
     pre Response:
     pre#response-wrapper
+  script(src='/javascripts/md5.min.js')
   script(src='/javascripts/authtest.js')

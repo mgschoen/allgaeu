@@ -1,12 +1,11 @@
 $(function(){
-  var authHash = $('#wrapper').attr('data-hash');
+  var apiTicket = $('#wrapper').attr('data-api-ticket');
+  var signature = md5(apiTicket + navigator.userAgent);
   $.ajax({
     method: 'POST',
-    url: '/session/' + authHash + '/',
-    data: {
-      key: 'value'
-    }
+    url: '/session/auth/' + signature + '/',
+    data: {}
   }).done(function(response){
-    $('#response-wrapper').text(response);
+    $('#response-wrapper').text(response.accessToken);
   });
 });
