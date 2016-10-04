@@ -53,51 +53,60 @@ router.get('/:token/start', function(req,res){
     // Token valid
     if (e === null && valid) {
 
-      // Determine all currently available content documents (e.g. quiz questions)
-      contentCollection.find({}, function(f,docs){
+      try {
+        // Determine all currently available content documents (e.g. quiz questions)
+        contentCollection.find({}, function(f,docs){
 
-        if (f === null) {
+          if (f === null) {
 
-          // Add each document's id to the answers object of the new session
-          for (var i = 0; i < docs.length; i++) {
-            var id = docs[i]._id;
-            sessionToInsert.answers[id] = null;
-          }
-
-          // Store the new session in mongo collection sessions
-          sessionCollection.insert(sessionToInsert, function(g, result){
-
-            if (g === null) {
-
-              // Respond with info about the generated session
-              res.json({
-                'message': '',
-                'session': sessionToInsert,
-                'success': true
-              });
-              return true;
-            } else {
-
-              // Error inserting session to collection
-              console.error('[ERROR] ' + g.message);
-              res.json({
-                'success': false,
-                'message': g.message
-              });
-              return false;
+            // Add each document's id to the answers object of the new session
+            for (var i = 0; i < docs.length; i++) {
+              var id = docs[i]._id;
+              sessionToInsert.answers[id] = null;
             }
-          });
-        } else {
 
-          // Error searching collection
-          console.error('[ERROR] ' + f.message);
-          res.json({
-            'success': false,
-            'message': f.message
-          });
-          return false;
-        }
-      });
+            // Store the new session in mongo collection sessions
+            sessionCollection.insert(sessionToInsert, function(g, result){
+
+              if (g === null) {
+
+                // Respond with info about the generated session
+                res.json({
+                  'message': '',
+                  'session': sessionToInsert,
+                  'success': true
+                });
+                return true;
+              } else {
+
+                // Error inserting session to collection
+                console.error('[ERROR] ' + g.message);
+                res.json({
+                  'success': false,
+                  'message': g.message
+                });
+                return false;
+              }
+            });
+          } else {
+
+            // Error searching collection
+            console.error('[ERROR] ' + f.message);
+            res.json({
+              'success': false,
+              'message': f.message
+            });
+            return false;
+          }
+        });
+      } catch (g) {
+        console.error('[ERROR] Error starting session: ' + g.message);
+        res.json({
+          'success': false,
+          'message': 'Error starting session: ' + f.message
+        });
+        return false;
+      }
 
     // Validation errors
     } else if (e === null) {
