@@ -123,12 +123,17 @@ router.get('/:token/start', function(req,res){
   });
 });
 
-router.get('/:token/get/:wurst', function(req,res){
+/** Retrieve session object by GET-ing /session/:token/get/:id
+ *  This route responds with the database entry of the session with
+ *  the specified ID. If no such session exists, it responds with an
+ *  error object.
+ */
+router.get('/:token/get/:id', function(req,res){
 
   var db = req.db;
   var sessionsCollection = db.get('sessions');
   var tokensCollection = db.get('sessions.tokens');
-  var idToGet = req.params.wurst;
+  var idToGet = req.params.id;
 
   // Validate access token
   auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
