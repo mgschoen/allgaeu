@@ -218,7 +218,12 @@ router.get('/:token/get/:id', function(req,res){
   });
 });
 
-
+/** In a specified session, update the value of an existing answer or
+ *  set a new answer value by POST-ing to
+ *  /session/:token/set/:sid/answer/:aid/val/:value
+ *  In case of success, this route responds with the updated session
+ *  object. Otherwise it responds with an error object.
+ */
 router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
 
   var db = req.db;
