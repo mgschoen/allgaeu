@@ -2,6 +2,8 @@ var auth = require('./auth.js');
 var express = require('express');
 var router = express.Router();
 
+const VALID_ANSWER_VALUES = ['yes','no',null];
+
 router.post('/', function(req, res) {
   res.send('Authentication failed');
 });
@@ -108,7 +110,7 @@ router.get('/:token/start', function(req,res){
         return false;
       }
 
-    // Validation errors
+    // Authentication errors
     } else if (e === null) {
       res.json({
         'success': false,
@@ -201,7 +203,7 @@ router.get('/:token/get/:id', function(req,res){
         return false;
       }
 
-    // Validation errors
+    // Authentication errors
     } else if (e === null) {
       res.json({
         'success': false,
@@ -214,6 +216,107 @@ router.get('/:token/get/:id', function(req,res){
       });
     }
   });
+});
+
+
+router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
+
+  var db = req.db;
+  var sessionsCollection = db.get('sessions');
+  var tokensCollection = db.get('sessions.tokens');
+  var submittedSessionID = req.params.sid;
+  var submittedAnswerID = req.params.aid;
+  var submittedAnswerVal = req.params.value;
+
+  // Validate access token
+  auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
+
+    // Token valid?
+    if (e === null && valid) {
+
+      // Submitted answer ID valid?
+      var regexMongoID =/^([a-f]|[0-9]){24}$/;
+      if (regexMongoID.test(submittedAnswerID)) {
+
+        // Submitted answer value valid?
+        if (VALID_ANSWER_VALUES.indexOf(submittedAnswerVal) > -1) {
+
+          var updateQuery = {};
+          updateQuery['answers.' + submittedAnswerID] = submittedAnswerVal;
+
+          try {
+
+            sessionsCollection.findOneAndUpdate(
+              {'_id': submittedSessionID},
+              {$set: updateQuery},
+              function (e, updatedSession) {
+
+                if (e === null) {
+
+                  res.json({
+                    'message': '',
+                    'session': updatedSession,
+                    'success': true
+                  });
+                  return true;
+
+                } else {
+
+                  console.log('[ERROR] Error while setting answer value: ' + e.message);
+                  res.json({
+                    'success': false,
+                    'message': 'Error while setting answer value: ' + e.message
+                  });
+                  return false;
+                }
+              }
+            );
+
+          } catch (g) {
+
+            // Exception while accessing database
+            console.error('[ERROR] ' + g.message);
+            res.json({
+              'success': false,
+              'message': g.message
+            });
+            return false;
+          }
+        } else {
+
+          // Submitted answer value invalid
+          console.log('[ERROR] Submitted answer value ' + submittedAnswerVal + ' is invalid');
+          res.json({
+            'success': false,
+            'message': 'Submitted answer value ' + submittedAnswerVal + ' is invalid'
+          });
+          return false;
+        }
+      } else {
+
+        // Submitted answer ID invalid
+        console.log('[ERROR] Submitted answer ID ' + submittedAnswerID + ' is invalid');
+        res.json({
+          'success': false,
+          'message': 'Submitted answer value ' + submittedAnswerID + ' is invalid'
+        });
+        return false;
+      }
+
+    // Authentication errors
+    } else if (e === null) {
+      res.json({
+        'success': false,
+        'message': 'There has been an error processing your request'
+      });
+    } else {
+      res.json({
+        'success': false,
+        'message': e.message
+      });
+    }
+  });
+
 });
 
 module.exports = {
