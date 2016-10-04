@@ -32,15 +32,16 @@ router.post('/:sig', function(req, res) {
 
         var ticket = result[0].ticket;
 
-        // Determine time passed since ticket creation
+        // Is ticket younger than 60 seconds?
         var ticketCreationDate = result[0].creationDate.valueOf();
         var now = new Date().valueOf();
         if ((now - ticketCreationDate) < 60000) {
 
-          // Remove used ticket and signature from collection
+          // Remove used ticket and signature from hash collection
           hashCollection.remove({'signature': submittedSignature}, function (err) {
             if (err === null) {
 
+              // Generate new access token and insert it to tokens collection
               var tokenCollection = db.get('sessions.tokens');
               var accessToken = md5((new Date()).valueOf().toString() + Math.random().toString());
               tokenCollection.insert({
@@ -69,7 +70,7 @@ router.post('/:sig', function(req, res) {
               });
             } else {
 
-              // Removing failed
+              // Removing hash failed
               console.error('[ERROR] Error removing ticket ' + ticket + ' from hash collection');
               res.json(jsonError('Internal server error. Please try again'));
               return false;
@@ -79,7 +80,7 @@ router.post('/:sig', function(req, res) {
         } else {
 
           // Ticket timed out
-          console.error('[ERROR] Ticket ' + ticket + ' has already timed out. Incoming connection refused.');
+          console.log('[INFO] Ticket ' + ticket + ' has already timed out. Incoming connection refused.');
           hashCollection.remove({'signature': submittedSignature}, function (err) {
             if (err !== null) {
               console.error('[ERROR] Failed to remove ticket from hash collection');
@@ -98,7 +99,7 @@ router.post('/:sig', function(req, res) {
       } else {
 
         // Signature not found
-        console.error('[ERROR] Authentication attempt failed: Signature ' + submittedSignature + ' was not found.');
+        console.log('[INFO] Authentication request rejected: Signature ' + submittedSignature + ' was not found.');
         res.json(jsonError('Signature incorrect, authentication failed'));
         return false;
       }
@@ -111,7 +112,7 @@ router.post('/:sig', function(req, res) {
   });
 });
 
-/** Creates a new hash consisting of ticket, signature and timestamp
+/** Create a new hash consisting of ticket, signature and timestamp
  *  and insert it to the database. This method is exported.
  * @param hashCollection - monk collection object
  * @param individualString - string that together with the ticket gets hashed to the signature
@@ -137,6 +138,78 @@ var insertHash = function (hashCollection, individualString, callback) {
   });
 };
 
+/** Check if a token is a valid access token, e. g. it is
+ *  part of the mongo collection sessions.tokens and it was not
+ *  created more than 24 hours ago. This method is exported.
+ * @param tokensCollection - monk collection object
+ * @param token - md5 hashed string
+ * @param callback - function to execute after validation
+ */
+var isValidAccessToken = function (tokensCollection, token, callback) {
+
+  tokensCollection.find({
+    'accessToken': token
+  }, function(e,result){
+
+    if (e === null) {
+
+      if (result.length === 1) {
+
+        // Is token younger than 24 hours?
+        var tokenCreationDate = result[0].creationDate.valueOf();
+        var now = new Date().valueOf();
+        if ((now - tokenCreationDate) < 86400000) {
+
+          // Token valid
+          callback(null, true);
+          return true;
+
+        } else {
+
+          // Token timed out
+          console.log('[INFO] Token ' + token + ' has already timed out. Incoming connection refused.');
+          callback(jsonError('Token timed out'), false);
+          tokensCollection.remove({
+            'accessToken': token
+          }, function (err) {
+
+            if (err !== null) {
+              // Removing token failed.
+              // We log this but don't care any further because the
+              // cronjob will take care of this zombie token.
+              console.error('[ERROR] Failed to remove token ' + token);
+              return false;
+            }
+
+            // Removing token successful
+            return true;
+          });
+        }
+
+      } else if (result.length > 1) {
+
+        // Token not unique
+        console.error('[ERROR] Access token ' + token + ' is not unique');
+        callback(jsonError('Access token ' + token + ' is not unique'), false);
+        return false;
+      } else {
+
+        // Token not found
+        console.log('[INFO] Authentication request rejected: Access token ' + token + ' was not found.');
+        callback(jsonError('Invalid token'), false);
+        return false;
+      }
+
+    } else {
+
+      // Other error
+      console.error('[ERROR] Error validating token: ' + e.message);
+      callback(jsonError('Error validating token: ' + e.message), false);
+      return false;
+    }
+  });
+}
+
 // Shorthand for generating a json error object
 var jsonError  = function (message) {
   var error = {
@@ -148,5 +221,6 @@ var jsonError  = function (message) {
 
 module.exports = {
   'router': router,
-  'insertHash': insertHash
+  'insertHash': insertHash,
+  'isValidAccessToken': isValidAccessToken
 };
