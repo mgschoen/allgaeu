@@ -6,10 +6,10 @@ router.post('/', function(req, res) {
   res.send('Authentication failed');
 });
 
-router.get('/:at', function(req, res){
+router.get('/:token', function(req, res){
   var db = req.db;
   var tokensCollection = db.get('sessions.tokens');
-  auth.isValidAccessToken(tokensCollection, req.params.at, function(e, valid){
+  auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
     if (e === null && valid) {
       res.json({
         'success': true,
@@ -34,7 +34,7 @@ router.get('/:at', function(req, res){
  *  saves it to the database and responds with a JSON-object
  *  containing info about the session.
  */
-router.get('/:at/start', function(req,res){
+router.get('/:token/start', function(req,res){
 
   var db = req.db;
   var contentCollection = db.get('content');
@@ -48,7 +48,7 @@ router.get('/:at/start', function(req,res){
   };
 
   // Validate access token
-  auth.isValidAccessToken(tokensCollection, req.params.at, function(e, valid){
+  auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
 
     // Token valid
     if (e === null && valid) {
@@ -98,6 +98,94 @@ router.get('/:at/start', function(req,res){
           return false;
         }
       });
+
+    // Validation errors
+    } else if (e === null) {
+      res.json({
+        'success': false,
+        'message': 'There has been an error processing your request'
+      });
+    } else {
+      res.json({
+        'success': false,
+        'message': e.message
+      });
+    }
+  });
+});
+
+router.get('/:token/get/:wurst', function(req,res){
+
+  var db = req.db;
+  var sessionsCollection = db.get('sessions');
+  var tokensCollection = db.get('sessions.tokens');
+  var idToGet = req.params.wurst;
+
+  // Validate access token
+  auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
+
+    // Token valid?
+    if (e === null && valid) {
+
+      try {
+        // Search for provided ID in sessions collection
+        sessionsCollection.find({
+          '_id': idToGet
+        }, function(f, result){
+
+          if (f === null) {
+
+            var numResults = result.length;
+
+            if (numResults === 1) {
+
+              // Session found
+              // Respond with JSON object of session
+              res.json({
+                'message': '',
+                'session': result[0],
+                'success': true
+              });
+              return true;
+
+            } else if (numResults > 1) {
+
+              // Session not unique
+              console.error('[ERROR] Session duplicate found: Found ' + numResults + ' sessions with ID ' + idToGet);
+              res.json({
+                'success': false,
+                'message': 'Internal server error. Please try again.'
+              });
+              return false;
+            } else {
+
+              // Session not found
+              res.json({
+                'success': false,
+                'message': 'Session with ID ' + idToGet + ' does not exist.'
+              });
+              return true;
+            }
+          } else {
+
+            // Error searching collection
+            console.error('[ERROR] ' + f.message);
+            res.json({
+              'success': false,
+              'message': f.message
+            });
+            return false;
+          }
+        });
+      } catch (g) {
+        // Error searching collection
+        console.error('[ERROR] ' + g.message);
+        res.json({
+          'success': false,
+          'message': g.message
+        });
+        return false;
+      }
 
     // Validation errors
     } else if (e === null) {
