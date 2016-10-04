@@ -38,8 +38,8 @@ router.post('/:sig', function(req, res) {
         if ((now - ticketCreationDate) < 60000) {
 
           // Remove used ticket and signature from hash collection
-          hashCollection.remove({'signature': submittedSignature}, function (err) {
-            if (err === null) {
+          hashCollection.remove({'signature': submittedSignature}, function (f) {
+            if (f === null) {
 
               // Generate new access token and insert it to tokens collection
               var tokenCollection = db.get('sessions.tokens');
@@ -48,9 +48,9 @@ router.post('/:sig', function(req, res) {
                 'accessToken': accessToken,
                 'creationDate': new Date(),
                 'signature': submittedSignature
-              }, {}, function (err) {
+              }, {}, function (g) {
 
-                if (err === null) {
+                if (g === null) {
 
                   // Respond with access token
                   res.json({
@@ -81,8 +81,8 @@ router.post('/:sig', function(req, res) {
 
           // Ticket timed out
           console.log('[INFO] Ticket ' + ticket + ' has already timed out. Incoming connection refused.');
-          hashCollection.remove({'signature': submittedSignature}, function (err) {
-            if (err !== null) {
+          hashCollection.remove({'signature': submittedSignature}, function (h) {
+            if (h !== null) {
               console.error('[ERROR] Failed to remove ticket from hash collection');
             }
           });
@@ -126,12 +126,12 @@ var insertHash = function (hashCollection, individualString, callback) {
     'signature': signature,
     'ticket': ticket
   };
-  hashCollection.insert(hash, function (err) {
-    if (err === null) {
+  hashCollection.insert(hash, function (e) {
+    if (e === null) {
       callback(null, hash);
     } else {
       var error = {
-        'msg': 'Failed to write to database',
+        'msg': 'Failed to write to database'
       };
       callback(error, hash);
     }
@@ -171,9 +171,9 @@ var isValidAccessToken = function (tokensCollection, token, callback) {
           callback(jsonError('Token timed out'), false);
           tokensCollection.remove({
             'accessToken': token
-          }, function (err) {
+          }, function (f) {
 
-            if (err !== null) {
+            if (f !== null) {
               // Removing token failed.
               // We log this but don't care any further because the
               // cronjob will take care of this zombie token.

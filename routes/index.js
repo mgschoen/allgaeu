@@ -15,9 +15,9 @@ router.get('/', function(req, res) {
   // Take header field "user-agent" for creating the signature in order to
   // assert that only the agent that gets sent the ticket can actually
   // login to the Session API
-  auth.insertHash(hashCollection, req.headers['user-agent'], function(err,hash){
+  auth.insertHash(hashCollection, req.headers['user-agent'], function(e,hash){
 
-    if (err === null) {
+    if (e === null) {
 
       // respond with the app including the ticket
       res.render('index', {
@@ -27,9 +27,9 @@ router.get('/', function(req, res) {
     } else {
 
       // Respond with error page
-      console.error('[ERROR] ' + err.message);
+      console.error('[ERROR] ' + e.message);
       res.render('error', {
-        message: err.message,
+        message: e.message,
         error: {}
       });
     }

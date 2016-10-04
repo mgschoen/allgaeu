@@ -9,13 +9,13 @@ router.post('/', function(req, res) {
 router.get('/:at', function(req, res){
   var db = req.db;
   var tokensCollection = db.get('sessions.tokens');
-  auth.isValidAccessToken(tokensCollection, req.params.at, function(err, valid){
-    if (err === null && valid) {
+  auth.isValidAccessToken(tokensCollection, req.params.at, function(e, valid){
+    if (e === null && valid) {
       res.json({
         'success': true,
         'message': 'Congrats! Your access token is totally valid'
       });
-    } else if (err === null) {
+    } else if (e === null) {
       res.json({
         'success': false,
         'message': 'There has been an error processing your request'
@@ -23,7 +23,7 @@ router.get('/:at', function(req, res){
     } else {
       res.json({
         'success': false,
-        'message': err.message
+        'message': e.message
       });
     }
   });
@@ -48,15 +48,15 @@ router.get('/:at/start', function(req,res){
   };
 
   // Validate access token
-  auth.isValidAccessToken(tokensCollection, req.params.at, function(err, valid){
+  auth.isValidAccessToken(tokensCollection, req.params.at, function(e, valid){
 
     // Token valid
-    if (err === null && valid) {
+    if (e === null && valid) {
 
       // Determine all currently available content documents (e.g. quiz questions)
-      contentCollection.find({}, function(err,docs){
+      contentCollection.find({}, function(f,docs){
 
-        if (err === null) {
+        if (f === null) {
 
           // Add each document's id to the answers object of the new session
           for (var i = 0; i < docs.length; i++) {
@@ -65,9 +65,9 @@ router.get('/:at/start', function(req,res){
           }
 
           // Store the new session in mongo collection sessions
-          sessionCollection.insert(sessionToInsert, function(err, result){
+          sessionCollection.insert(sessionToInsert, function(g, result){
 
-            if (err === null) {
+            if (g === null) {
 
               // Respond with info about the generated session
               res.json({
@@ -79,10 +79,10 @@ router.get('/:at/start', function(req,res){
             } else {
 
               // Error inserting session to collection
-              console.error('[ERROR] ' + err.message);
+              console.error('[ERROR] ' + g.message);
               res.json({
                 'success': false,
-                'message': err.message
+                'message': g.message
               });
               return false;
             }
@@ -90,17 +90,17 @@ router.get('/:at/start', function(req,res){
         } else {
 
           // Error searching collection
-          console.error('[ERROR] ' + err.message);
+          console.error('[ERROR] ' + f.message);
           res.json({
             'success': false,
-            'message': err.message
+            'message': f.message
           });
           return false;
         }
       });
 
     // Validation errors
-    } else if (err === null) {
+    } else if (e === null) {
       res.json({
         'success': false,
         'message': 'There has been an error processing your request'
@@ -108,7 +108,7 @@ router.get('/:at/start', function(req,res){
     } else {
       res.json({
         'success': false,
-        'message': err.message
+        'message': e.message
       });
     }
   });
