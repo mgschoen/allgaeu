@@ -375,6 +375,13 @@ router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
 
 });
 
+/** Close an existing session by POST-ing to /session/:token/set/:id/close
+ *  This route changes the status of a session to 'closed'
+ *  and saves the current time as time of termination. A
+ *  closed session cannot be changed any further. However,
+ *  it can still be read by GET-ing the /session/:token/get/:id
+ *  route.
+ */
 router.post('/:token/set/:id/close', function(req,res){
 
   var db = req.db;
@@ -400,6 +407,8 @@ router.post('/:token/set/:id/close', function(req,res){
               // Is session still open?
               if (sessionFound.status !== 'closed') {
 
+                // DB query: set status to closed and current
+                // time as time of session termination
                 var updateQuery = {
                   'closed': new Date(),
                   'status': 'closed'
