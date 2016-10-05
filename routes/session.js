@@ -265,7 +265,7 @@ router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
                 if (f === null && sessionFound !== null) {
 
                   // Is session still open?
-                  if (sessionFound.status === 'in-progress') {
+                  if (sessionFound.status !== 'closed') {
 
                     var updateQuery = {};
                     updateQuery['answers.' + submittedAnswerID] = submittedAnswerVal;
@@ -274,9 +274,9 @@ router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
                     sessionsCollection.findOneAndUpdate(
                       {'_id': submittedSessionID},
                       {$set: updateQuery},
-                      function (e, updatedSession) {
+                      function (g, updatedSession) {
 
-                        if (e === null) {
+                        if (g === null) {
 
                           res.json({
                             'message': '',
@@ -355,6 +355,123 @@ router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
         res.json({
           'success': false,
           'message': 'Submitted answer value ' + submittedAnswerID + ' is invalid'
+        });
+        return false;
+      }
+
+    // Authentication errors
+    } else if (e === null) {
+      res.json({
+        'success': false,
+        'message': 'There has been an error processing your request'
+      });
+    } else {
+      res.json({
+        'success': false,
+        'message': e.message
+      });
+    }
+  });
+
+});
+
+router.post('/:token/set/:id/close', function(req,res){
+
+  var db = req.db;
+  var sessionsCollection = db.get('sessions');
+  var tokensCollection = db.get('sessions.tokens');
+  var submittedSessionID = req.params.id;
+
+  // Validate access token
+  auth.isValidAccessToken(tokensCollection, req.params.token, function(e, valid){
+
+    // Token valid?
+    if (e === null && valid) {
+
+      try {
+
+        // Search for session
+        sessionsCollection.findOne(
+          { '_id': submittedSessionID },
+          function (f, sessionFound) {
+
+            if (f === null && sessionFound !== null) {
+
+              // Is session still open?
+              if (sessionFound.status !== 'closed') {
+
+                var updateQuery = {
+                  'closed': new Date(),
+                  'status': 'closed'
+                };
+
+                // Update session
+                sessionsCollection.findOneAndUpdate(
+                  {'_id': submittedSessionID},
+                  {$set: updateQuery},
+                  function (g, updatedSession) {
+
+                    if (g === null) {
+
+                      res.json({
+                        'message': '',
+                        'session': updatedSession,
+                        'success': true
+                      });
+                      return true;
+
+                    } else {
+
+                      console.log('[ERROR] Error closing session: ' + e.message);
+                      res.json({
+                        'success': false,
+                        'message': 'Error closing session: ' + e.message
+                      });
+                      return false;
+                    }
+                  }
+                );
+
+              } else {
+
+                // Session already closed
+                console.error('[ERROR] Session with ID ' + submittedSessionID + ' is already closed. Close request rejected.');
+                res.json({
+                  'success': false,
+                  'message': 'Session with ID ' + submittedSessionID + ' is already closed'
+                });
+                return false;
+              }
+
+            } else if (f === null) {
+
+              // No session found
+              console.error('[ERROR] Session with ID ' + submittedSessionID + ' was not found.');
+              res.json({
+                'success': false,
+                'message': 'Session with ID ' + submittedSessionID + ' was not found'
+              });
+              return false;
+            } else {
+
+              // Error searching for session
+              console.error('[ERROR] Error searching collection: ' + f.message);
+              res.json({
+                'success': false,
+                'message': 'Internal server error. Please try again.'
+              });
+              return false;
+            }
+          }
+        );
+
+      } catch (g) {
+
+        // Exception while accessing database
+        console.error('[ERROR] ' + g.message);
+        res.json({
+          'success': false,
+          'message': g.message
         });
         return false;
       }
