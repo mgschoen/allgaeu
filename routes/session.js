@@ -220,7 +220,16 @@ router.get('/:token/get/:id', function(req,res){
 
 /** In a specified session, update the value of an existing answer or
  *  set a new answer value by POST-ing to
- *  /session/:token/set/:sid/answer/:aid/val/:value
+ *
+ *    /session/:token/set/:sid/answer/:aid/val/:value
+ *
+ *  where
+ *
+ *    :token is the access token,
+ *    :sid is the ID of the session to change,
+ *    :aid is the ID of the answer to change and
+ *    :value is the new value the answer should get assigned.
+ *
  *  In case of success, this route responds with the updated session
  *  object. Otherwise it responds with an error object.
  */
@@ -246,36 +255,78 @@ router.post('/:token/set/:sid/answer/:aid/val/:value', function(req,res){
         // Submitted answer value valid?
         if (VALID_ANSWER_VALUES.indexOf(submittedAnswerVal) > -1) {
 
-          var updateQuery = {};
-          updateQuery['answers.' + submittedAnswerID] = submittedAnswerVal;
-
           try {
 
-            sessionsCollection.findOneAndUpdate(
-              {'_id': submittedSessionID},
-              {$set: updateQuery},
-              function (e, updatedSession) {
+            // Search for session
+            sessionsCollection.findOne(
+              { '_id': submittedSessionID },
+              function (f, sessionFound) {
 
-                if (e === null) {
+                if (f === null && sessionFound !== null) {
 
-                  res.json({
-                    'message': '',
-                    'session': updatedSession,
-                    'success': true
-                  });
-                  return true;
+                  // Is session still open?
+                  if (sessionFound.status === 'in-progress') {
 
-                } else {
+                    var updateQuery = {};
+                    updateQuery['answers.' + submittedAnswerID] = submittedAnswerVal;
 
-                  console.log('[ERROR] Error while setting answer value: ' + e.message);
+                    // Update session
+                    sessionsCollection.findOneAndUpdate(
+                      {'_id': submittedSessionID},
+                      {$set: updateQuery},
+                      function (e, updatedSession) {
+
+                        if (e === null) {
+
+                          res.json({
+                            'message': '',
+                            'session': updatedSession,
+                            'success': true
+                          });
+                          return true;
+
+                        } else {
+
+                          console.log('[ERROR] Error while setting answer value: ' + e.message);
+                          res.json({
+                            'success': false,
+                            'message': 'Error while setting answer value: ' + e.message
+                          });
+                          return false;
+                        }
+                      }
+                    );
+                  } else {
+
+                    // Session already closed
+                    console.error('[ERROR] Session with ID ' + submittedSessionID + ' is already closed. Edit request rejected.');
+                    res.json({
+                      'success': false,
+                      'message': 'Session with ID ' + submittedSessionID + ' is already closed and can not be edited'
+                    });
+                    return false;
+                  }
+                } else if (f === null) {
+
+                  // No session found
+                  console.error('[ERROR] Session with ID ' + submittedSessionID + ' was not found.');
                   res.json({
                     'success': false,
-                    'message': 'Error while setting answer value: ' + e.message
+                    'message': 'Session with ID ' + submittedSessionID + ' was not found'
+                  });
+                  return false;
+                } else {
+
+                  // Error searching for session
+                  console.error('[ERROR] Error searching collection: ' + f.message);
+                  res.json({
+                    'success': false,
+                    'message': 'Internal server error. Please try again.'
                   });
                   return false;
                 }
               }
-            );
+              );
 
           } catch (g) {
 
