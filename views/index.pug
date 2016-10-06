@@ -4,7 +4,7 @@ block content
   h1= title
   p Welcome to #{title}
   p Trying Hash #{apiTicket}...
-  #wrapper(data-api-ticket='#{apiTicket}')
+  #wrapper(data-api-ticket=apiTicket)
     pre Response:
     pre#response-wrapper
   script(src='/javascripts/md5.min.js')
