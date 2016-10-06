@@ -9,7 +9,7 @@
   "homepage": "allgaeu.mgschoen.de",
   "scripts": {
     "start": "node ./bin/www >> $(date +\"./log/npm-%y-%m-%d.log\") 2>&1 &",
-    "stop": "pkill SIGINT allgaeu"
+    "stop": "pkill --signal SIGINT allgaeu"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
