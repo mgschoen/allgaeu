@@ -1,4 +1,4 @@
-$(function(){
+function authenticate() {
   var apiTicket = $('#wrapper').attr('data-api-ticket');
   var signature = md5(apiTicket + navigator.userAgent);
   $.ajax({
@@ -8,4 +8,4 @@ $(function(){
   }).done(function(response){
     $('#response-wrapper').text(response.accessToken);
   });
-});
+}
