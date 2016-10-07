@@ -21,8 +21,8 @@ router.get('/', function(req, res) {
     if (e === null) {
 
       // respond with the app including the ticket
-      res.render('index', {
-        title: 'Express',
+      res.render('app', {
+        title: 'Allgäu - or not?',
         apiTicket: hash.ticket
       });
     } else {

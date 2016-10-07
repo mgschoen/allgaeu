@@ -1,0 +1,40 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge')
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        title= title
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+        link(rel='stylesheet' href='/stylesheets/style.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+    body.app-background
+        .container.app-container
+            section.welcome
+                .row.cvs-headline
+                    .col-md-12
+                        h1= title
+                .row.cvs-main
+                    .col-md-8.cvs-main_imageBlock
+                        .row.cvs-main_image
+                            img.img-responsive(src='/images/welcome.JPG')
+                        .row.cvs-main_imageMeta
+                            .col-sm-8.cvs-main_imageCaption
+                                p Definitiv Allgäu: Viehscheid in Bad Hindeland.
+                            .col-sm-4.cvs-main_imageCredit
+                                p Foto: Flodur63/Wikimedia Commons
+                    .col-md-4.cvs-main_textBlock
+                        p
+                            | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                            | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                            | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                            | aus wie zu Hause!
+
+                        p
+                            | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
+                            | diese Bilder aus dem Allgäu - oder nicht?
+
+                        button Quiz starten
+                        //p This is your api-ticket: #{apiTicket}
+            section.quizpage#2323487234
+            section.goodbye

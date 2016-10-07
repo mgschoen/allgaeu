@@ -1,8 +1,43 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+// Debugging only
+//div {
+//  border: 1px solid black;
+//}
+
+// Components
+$cvs: ".cvs";   // Quiz canvas
+$app: ".app";   // Global settings
+$hdr: ".hdr";   // Header
+$nav: ".nav";   // Navigation
+
+// Font sizes
+$font-huge:      56px;
+$font-big:       48px;
+$font-highlight: 32px;
+$font-normal:    18px;
+$font-small:     14px;
+$font-mini:      10px;
+
+#{$app} {
+
+  &-background {
+    //background: #eaeaea;
+  }
+
+  &-container {
+    background: #fff;
+    font-size: $font-normal;
+  }
 }
 
-a {
-  color: #00B7FF;
+@media (min-width: 1200px) {
+
+  #{$app} {
+
+    &-container {
+      width: 970px;
+    }
+  }
 }
+
+@import 'navigation';
+@import 'quizcanvas';

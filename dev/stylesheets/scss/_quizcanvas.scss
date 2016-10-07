@@ -1,0 +1,42 @@
+#{$cvs} {
+
+  &-headline {
+    margin-bottom: 30px;
+    margin-top: 15px;
+    text-align: center;
+
+    & h1 {
+      font-size: $font-big;
+    }
+  }
+
+  &-main {
+
+    &_imageBlock {
+
+    }
+
+    &_image {
+
+    }
+
+    &_imageMeta {
+
+    }
+
+    &_imageCaption {
+      font-size: $font-small;
+    }
+
+    &_imageCredit {
+      font-size: $font-mini;
+      hyphens: auto;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    &_textBlock {
+      margin-bottom: 40px;
+    }
+  }
+}
