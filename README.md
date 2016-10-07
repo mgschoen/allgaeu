@@ -6,4 +6,4 @@ So here's the test: Can you separate the wheat from the chaff? Are these picture
 
 ### About this package
 
-This repository contains the node app that serves the app. It will soon be hosted under http://allgaeu.mgschoen.de.
+This repository contains the node app that serves the *Allgäu or not* quiz. It will soon be hosted under http://allgaeu.mgschoen.de.
