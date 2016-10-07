@@ -12,6 +12,9 @@
     "stop": "pkill --signal SIGINT allgaeu",
     "postinstall": "grunt"
   },
+  "config": {
+    "unsafe-perm": true
+  },
   "dependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
