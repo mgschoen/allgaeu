@@ -23,7 +23,8 @@ router.get('/', function(req, res) {
       // respond with the app including the ticket
       res.render('app', {
         title: 'Allgäu - or not?',
-        apiTicket: hash.ticket
+        apiTicket: hash.ticket,
+        year: new Date().getFullYear()
       });
     } else {
 

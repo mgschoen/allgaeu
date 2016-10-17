@@ -6,10 +6,10 @@ html
         meta(name='viewport' content='width=device-width, initial-scale=1')
         title= title
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
-        link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Walter+Turncoat')
+        link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Walter+Turncoat|Jaldi')
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
-    body.app-background
+    body.app.app-background
         .container.app-container
             section.welcome
                 .row.cvs-headline
@@ -20,10 +20,10 @@ html
                         .row.cvs-main_image
                             img.img-responsive(src='/images/welcome.JPG')
                         .row.cvs-main_imageMeta
-                            .col-sm-8.cvs-main_imageCaption
-                                p Definitiv Allgäu: Viehscheid in Bad Hindeland.
-                            .col-sm-4.cvs-main_imageCredit
-                                p Foto: Flodur63 / Wikimedia Commons
+                            span.col-sm-8.cvs-main_imageCaption
+                                | Definitiv Allgäu: Viehscheid in Bad Hindelang.
+                            span.col-sm-4.cvs-main_imageCredit
+                                | Foto: Flodur63 / Wikimedia Commons
                     .col-sm-4.cvs-main_textBlock
                         p
                             | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
@@ -38,5 +38,10 @@ html
                         button Quiz starten
                         button Lieber nicht
                         //p This is your api-ticket: #{apiTicket}
-            section.quizpage#2323487234
-            section.goodbye
+            section.quizpage.hidden#2323487234
+            section.goodbye.hidden
+        .container.app-footer
+            .row
+                .col-sm-12
+                    | &copy; #{year} Martin Schön &ndash;&nbsp;
+                    a(href='#') Impressum
