@@ -68,6 +68,16 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       }
     },
+    postcss: {
+      options: {
+        processors: [
+          require('autoprefixer')
+        ]
+      },
+      dist: {
+        src: 'dev/stylesheets/compiled/style.css'
+      }
+    },
     sass: {
       dist: {
         options: {
@@ -85,7 +95,7 @@ module.exports = function(grunt) {
       },
       stylesheets: {
         files: ['dev/stylesheets/scss/*.scss'],
-        tasks: ['sass', 'copy:css']
+        tasks: ['sass', 'postcss', 'copy:css']
       },
       javascripts: {
         files: ['dev/javascripts/js/*.js'],
@@ -101,6 +111,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-postcss');
 
   // Default task. Builds static .css and .js files.
   grunt.registerTask('default', ['sass', 'concat', 'uglify', 'copy']);

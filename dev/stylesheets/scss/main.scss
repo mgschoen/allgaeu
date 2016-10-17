@@ -17,19 +17,28 @@ $font-normal:    18px;
 $font-small:     14px;
 $font-mini:      10px;
 
+// Font families
+$fontfam-slant:   'Walter Turncoat', cursive;
+$fontfam-sans:    Arial, sans-serif;
+$fontfam-serif:   Times, serif;
+
+
 #{$app} {
 
   &-background {
-    //background: #eaeaea;
+    background: #eaeaea;
   }
 
   &-container {
     background: #fff;
+    box-shadow: 0 0 20px -4px #111;
     font-size: $font-normal;
+    margin-top: 20px;
+    padding: 35px;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (max-width: 1400px) {
 
   #{$app} {
 

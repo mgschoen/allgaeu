@@ -2,15 +2,23 @@
 
   &-headline {
     margin-bottom: 30px;
-    margin-top: 15px;
+    margin-top: 0;
     text-align: center;
 
     & h1 {
       font-size: $font-big;
+      font-family: $fontfam-slant;
+      margin-top: 0;
     }
   }
 
   &-main {
+
+    & button {
+      font-family: $fontfam-slant;
+      width: 100%;
+      margin: 5px auto;
+    }
 
     &_imageBlock {
 
