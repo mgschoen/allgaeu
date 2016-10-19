@@ -4,6 +4,18 @@ $app: ".app";   // Global settings
 $hdr: ".hdr";   // Header
 $nav: ".nav";   // Navigation
 
+// Colors
+$color-positive:       #8d8;
+$color-positive-hl:    #9e9;
+$color-negative:       #d88;
+$color-negative-hl:    #e99;
+$color-black:          #000;
+$color-neutral-dark:   #333;
+$color-neutral-shade:  #aaa;
+$color-neutral-medium: #ddd;
+$color-neutral-light:  #eaeaea;
+$color-white:          #fff;
+
 // Font sizes
 $font-huge:      56px;
 $font-big:       48px;
@@ -28,9 +40,9 @@ $fontfam-serif:   Times, serif;
   }
 
   &-container {
-    background: #fff;
-    box-shadow: 0 0 20px -4px #aaa;
-    border: 3px solid #333;
+    background: $color-white;
+    box-shadow: 0 0 20px -4px $color-neutral-shade;
+    border: 3px solid $color-neutral-dark;
     font-size: $font-normal;
     margin-top: 20px;
     padding: 35px;

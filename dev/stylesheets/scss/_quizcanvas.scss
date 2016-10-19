@@ -15,9 +15,33 @@
   &-main {
 
     & button {
+      background: $color-neutral-medium;
+      border: 2px solid $color-neutral-dark;
+      border-radius: 1px;
       font-family: $fontfam-slant;
-      width: 100%;
       margin: 5px auto;
+      padding: 5px 0;
+      width: 100%;
+
+      &:hover {
+        background: $color-neutral-light;
+      }
+
+      &.positive {
+        background: $color-positive;
+
+        &:hover {
+          background: $color-positive-hl;
+        }
+      }
+
+      &.negative {
+        background: $color-negative;
+
+        &:hover {
+          background: $color-negative-hl;
+        }
+      }
     }
 
     &_imageBlock {
@@ -38,7 +62,7 @@
     }
 
     &_imageCredit {
-      color: #aaa;
+      color: $color-neutral-shade;
       font-size: $font-micro;
       hyphens: auto;
       text-align: right;
@@ -47,7 +71,7 @@
     }
 
     &_textBlock {
-      margin-bottom: 40px;
+
     }
   }
 }
