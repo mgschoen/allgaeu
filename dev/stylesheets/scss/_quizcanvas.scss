@@ -12,41 +12,7 @@
     }
   }
 
-  &-main {
-
-    & button {
-      background: $color-neutral-medium;
-      border: 2px solid $color-neutral-dark;
-      border-radius: 1px;
-      font-family: $fontfam-slant;
-      margin: 5px auto;
-      padding: 5px 0;
-      width: 100%;
-
-      &:hover {
-        background: $color-neutral-light;
-      }
-
-      &.positive {
-        background: $color-positive;
-
-        &:hover {
-          background: $color-positive-hl;
-        }
-      }
-
-      &.negative {
-        background: $color-negative;
-
-        &:hover {
-          background: $color-negative-hl;
-        }
-      }
-    }
-
-    &_imageBlock {
-
-    }
+  &-imageBlock {
 
     &_image {
 
@@ -59,19 +25,70 @@
     &_imageCaption {
       font-size: $font-small;
       padding: 0;
+      transition: color 1s, text-shadow 1s;
+
+      &-blurred {
+        color: transparent;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+      }
     }
 
     &_imageCredit {
       color: $color-neutral-shade;
       font-size: $font-micro;
       hyphens: auto;
+      padding: 0;
       text-align: right;
       text-transform: uppercase;
-      padding: 0;
+      transition: color 1s, text-shadow 1s;
+
+      &-blurred {
+        color: transparent;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+      }
     }
+  }
 
-    &_textBlock {
+  &-textBlock {
 
+    & button {
+      background: $color-neutral-medium;
+      border: 2px solid $color-neutral-dark;
+      border-radius: 1px;
+      font-family: $fontfam-slant;
+      margin: 5px auto;
+      padding: 5px 0;
+      transition: box-shadow 0.5s, filter 0.5s, opacity 0.5s;
+      width: 100%;
+
+      &:hover {
+        background: $color-neutral-light;
+      }
+
+      &.negative {
+        background: $color-negative;
+
+        &:hover {
+          background: $color-negative-hl;
+        }
+      }
+
+      &.positive {
+        background: $color-positive;
+
+        &:hover {
+          background: $color-positive-hl;
+        }
+      }
+
+      &.selected {
+        box-shadow: 0 0 5px 0 $color-neutral-shade;
+      }
+
+      &.unselected {
+        filter: saturate(0.5);
+        opacity: 0.5;
+      }
     }
   }
 }
@@ -87,7 +104,7 @@
       }
     }
 
-    &-main {
+    &-imageBlock {
 
       &_imageMeta {
         line-height: 1em;

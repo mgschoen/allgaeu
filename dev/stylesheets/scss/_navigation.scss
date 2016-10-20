@@ -1,0 +1,30 @@
+#{$nvg} {
+
+  box-shadow: 0 0 15px 0 $color-neutral-shade;
+  max-height: 70px;
+  overflow: hidden;
+
+  &-imgList {
+
+    margin: 0;
+
+    &_item {
+
+      display: inline-block;
+      float: left;
+
+      img {
+        max-height: 70px;
+      }
+
+      &.selected {
+        margin-left: 45vw;
+      }
+
+      &.unselected {
+        filter: saturate(0.5);
+        opacity: 0.5;
+      }
+    }
+  }
+}

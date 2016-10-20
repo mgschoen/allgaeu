@@ -10,21 +10,21 @@ html
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
     body.app.app-background
-        .container.app-container
-            section.welcome
+        section.welcome.hidden
+            .container.app-container
                 .row.cvs-headline
                     .col-sm-12
                         h1= title
-                .row.cvs-main
-                    .col-sm-8.cvs-main_imageBlock
-                        .row.cvs-main_image
+                .row
+                    .col-sm-8.cvs-imageBlock
+                        .row.cvs-imageBlock_image
                             img.img-responsive(src='/images/welcome.JPG')
-                        .row.cvs-main_imageMeta
-                            span.col-sm-8.cvs-main_imageCaption
+                        .row.cvs-imageBlock_imageMeta
+                            span.col-sm-8.cvs-imageBlock_imageCaption
                                 | Definitiv Allgäu: Viehscheid in Bad Hindelang.
-                            span.col-sm-4.cvs-main_imageCredit
+                            span.col-sm-4.cvs-imageBlock_imageCredit
                                 | Foto: Flodur63 / Wikimedia Commons
-                    .col-sm-4.cvs-main_textBlock
+                    .col-sm-4.cvs-textBlock
                         p
                             | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
                             | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
@@ -37,8 +37,63 @@ html
 
                         button Quiz starten
                         //p This is your api-ticket: #{apiTicket}
-            section.quizpage.hidden#2323487234
-            section.goodbye.hidden
+        section.quizpage#2323487234
+            .container.app-container
+                .row.cvs-headline
+                    .col-sm-12
+                        h1= title
+                .row
+                    .col-sm-8.cvs-imageBlock
+                        .row.cvs-imageBlock_image
+                            img.img-responsive(src='/images/welcome.JPG')
+                        .row.cvs-imageBlock_imageMeta
+                            span.col-sm-8.cvs-imageBlock_imageCaption.cvs-imageBlock_imageCaption-blurred
+                                | Definitiv Allgäu: Viehscheid in Bad Hindelang.
+                            span.col-sm-4.cvs-imageBlock_imageCredit.cvs-imageBlock_imageCredit-blurred
+                                | Foto: Flodur63 / Wikimedia Commons
+                    .col-sm-4.cvs-textBlock
+                        p
+                            | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                            | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                            | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                            | aus wie zu Hause!
+
+                        p
+                            | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
+                            | diese Bilder aus dem Allgäu - oder nicht?
+
+                        button.positive.selected Allgäu
+                        button.negative.unselected Not Allgäu
+            .navbar.navbar-default.navbar-fixed-bottom.nvg
+                .container-fluid
+                    ul.nav.navbar-nav.nvg-imgList
+                        li.nvg-imgList_item.selected
+                            img.img-responsive(src="/images/welcome.JPG")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q1.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q2.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q3.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q4.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q5.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q6.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q7.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q8.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q9.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q10.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q11.jpg")
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src="/images/q12.jpg")
+        section.goodbye.hidden
         .container.app-footer
             .row
                 .col-sm-12

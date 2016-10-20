@@ -2,7 +2,7 @@
 $cvs: ".cvs";   // Quiz canvas
 $app: ".app";   // Global settings
 $hdr: ".hdr";   // Header
-$nav: ".nav";   // Navigation
+$nvg: ".nvg";   // Navigation
 
 // Colors
 $color-positive:       #8d8;
@@ -50,7 +50,7 @@ $fontfam-serif:   Times, serif;
 
   &-footer {
     font-size: $font-mini;
-    margin-bottom: 20px;
+    margin-bottom: 100px;
     margin-top: 5px;
     text-align: center;
   }
