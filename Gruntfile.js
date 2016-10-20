@@ -45,11 +45,11 @@ module.exports = function(grunt) {
       },
       md5: {
         src: 'node_modules/js-md5/build/md5.min.js',
-        dest: 'public/javascripts/md5.min.js'
+        dest: 'public/plugins/js-md5/md5.min.js'
       },
       owlcarousel: {
         expand: true,
-        cwd: 'node_modules/owlcarousel/owl-carousel/',
+        cwd: 'node_modules/owl.carousel/dist/',
         src: '**',
         dest: 'public/plugins/owl-carousel/'
       }

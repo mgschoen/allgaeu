@@ -7,8 +7,12 @@ html
         title= title
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
         link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Walter+Turncoat|Jaldi')
+        link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.carousel.min.css')
+        link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.theme.default.min.css')
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+        script(src='/plugins/owl-carousel/owl.carousel.min.js')
+        script(src='/javascripts/allgaeu.min.js')
     body.app.app-background
         section.welcome.hidden
             .container.app-container
@@ -65,34 +69,36 @@ html
                         button.positive.selected Allgäu
                         button.negative.unselected Not Allgäu
             .navbar.navbar-default.navbar-fixed-bottom.nvg
-                .container-fluid
-                    ul.nav.navbar-nav.nvg-imgList
+                .container
+                    ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/welcome.JPG')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q1.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q2.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q3.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q4.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q5.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q6.jpg')
+                        li.nvg-imgList_item.unselected
+                            img.img-responsive(src='/images/q7.jpg')
                         li.nvg-imgList_item.selected
-                            img.img-responsive(src="/images/welcome.JPG")
+                            img.img-responsive(src='/images/q8.jpg')
                         li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q1.jpg")
+                            img.img-responsive(src='/images/q9.jpg')
                         li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q2.jpg")
+                            img.img-responsive(src='/images/q10.jpg')
                         li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q3.jpg")
+                            img.img-responsive(src='/images/q11.jpg')
                         li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q4.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q5.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q6.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q7.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q8.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q9.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q10.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q11.jpg")
-                        li.nvg-imgList_item.unselected
-                            img.img-responsive(src="/images/q12.jpg")
+                            img.img-responsive(src='/images/q12.jpg')
+                    button.nvg-directions_arrow.nvg-directions_arrow-left <
+                    button.nvg-directions_arrow.nvg-directions_arrow-right >
         section.goodbye.hidden
         .container.app-footer
             .row
