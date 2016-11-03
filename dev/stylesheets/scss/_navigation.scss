@@ -1,37 +1,41 @@
 #{$nvg} {
-
+  background: $color-white;
   border-top: 2px solid $color-neutral-dark;
-  box-shadow: 0 0 15px 0 $color-neutral-dark;
+  box-shadow: 0 0 0 0;
+  margin-bottom: 0px;
   max-height: 90px;
-  overflow: hidden;
+  text-align: center;
+  transform: translateY(100%);
+  transition: box-shadow 0.5s, transform 0.5s;
 
-  &-imgList {
+  &-unfold {
+    box-shadow: 0 0 15px 0 $color-neutral-dark;
+    transform: translateY(0);
 
-    margin: 0;
-
-    &_item {
-
-      filter: saturate(0);
-      margin: 10px auto;
-      opacity: 0.7;
-      text-align: center;
-      transition: opacity 0.5s, filter 0.5s;
-
-      img {
-        margin: auto;
-        max-height: 70px;
-        max-width: 93px;
-      }
-
-      &:hover {
-        cursor: pointer;
-        opacity: 1;
-      }
+    #{$nvg}-counter {
+      box-shadow: 0 -7px 15px -7px $color-neutral-dark;
     }
+  }
 
-    .center #{$nvg}-imgList_item {
-      filter: saturate(1);
-      opacity: 1;
+  &-counter {
+    background: $color-white;
+    border-radius: 10px 10px 0 0;
+    border-left: 2px solid $color-neutral-dark;
+    border-right: 2px solid $color-neutral-dark;
+    border-top: 2px solid $color-neutral-dark;
+    box-shadow: 0 -7px 15px -7px $color-neutral-dark;
+    color: $color-neutral-dark;
+    font-size: $font-small;
+    height: 35px;
+    left: 50%;
+    margin: -35px auto 0;
+    position: fixed;
+    transform: translateX(-50%);
+    transition: box-shadow 0.5s;
+    width: 100px;
+
+    &_inscription {
+      margin-top: 5px;
     }
   }
 
@@ -70,11 +74,51 @@
       }
     }
   }
+
+  &-imgList {
+    margin: 0;
+
+    &_item {
+      filter: saturate(0);
+      margin: 10px auto;
+      opacity: 0.7;
+      text-align: center;
+      transition: opacity 0.5s, filter 0.5s;
+
+      img {
+        margin: auto;
+        max-height: 70px;
+        max-width: 93px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
+    }
+
+    .center #{$nvg}-imgList_item {
+      filter: saturate(1);
+      opacity: 1;
+    }
+  }
 }
 
 @media (max-width: 992px) {
 
   #{$nvg} {
+
+    &-unfold {
+      box-shadow: 0 0 15px -5px $color-neutral-dark;
+
+      #{$nvg}-counter {
+        box-shadow: 0 -7px 15px -12px $color-neutral-dark;
+      }
+    }
+
+    &-counter {
+      box-shadow: 0 0 15px -5px $color-neutral-dark;
+    }
 
     &-directions {
 
@@ -89,6 +133,12 @@
 @media (max-width: 767px) {
 
   #{$nvg} {
+
+    &-counter {
+      left: auto;
+      right: 38px;
+      transform: translateY(0);
+    }
 
     &-directions {
 

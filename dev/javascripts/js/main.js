@@ -1,3 +1,17 @@
+// Determine whether navbar would occlude canvas.
+// If not: Show it!
+function unfoldNavbarIfPossible () {
+  var canvasHeight = $("section.quizpage")[0].offsetHeight;
+  var canvasMarginTop = parseInt($(".app-container").css("margin-top").split("px")[0]);
+  var viewportHeight = window.innerHeight;
+  var navbarHeight = $(".nvg")[0].offsetHeight + $(".nvg-counter")[0].offsetHeight;
+  if (viewportHeight - (canvasHeight + canvasMarginTop) > navbarHeight) {
+    $(".nvg").addClass("nvg-unfold");
+  } else {
+    $(".nvg").removeClass("nvg-unfold");
+  }
+}
+
 $(function(){
 
   var carousel = $("#navcarousel").owlCarousel({
@@ -24,15 +38,27 @@ $(function(){
     startPosition: 2
   });
 
-  $(".nvg-directions_arrow-left").click(function(){
+  unfoldNavbarIfPossible();
+
+  $(window).resize(unfoldNavbarIfPossible);
+
+  $(document).on("scroll", function(){
+    $(".nvg").removeClass("nvg-unfold");
+  });
+
+  $(".nvg-counter").on("click touch",function(){
+    $(".nvg").toggleClass("nvg-unfold");
+  });
+
+  $(".nvg-directions_arrow-left").on("click touch", function(){
     carousel.trigger("prev.owl.carousel");
   });
 
-  $(".nvg-directions_arrow-right").click(function(){
+  $(".nvg-directions_arrow-right").on("click touch", function(){
     carousel.trigger("next.owl.carousel");
   });
 
-  $(".owl-item").click(function(){
+  $(".owl-item").on("click touch", function(){
     var index = $(this).index();
     $(".nvg-imgList_item.selected").removeClass("selected").addClass("unselected");
     $(this).find(".nvg-imgList_item").removeClass("unselected").addClass("selected");
