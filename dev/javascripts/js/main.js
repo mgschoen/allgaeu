@@ -46,9 +46,12 @@ $(function(){
     $(".nvg").removeClass("nvg-unfold");
   });
 
-  $(".nvg-counter").on("click touch",function(){
+  $(".nvg-counter").on("click touchstart",function(){
     $(".nvg").toggleClass("nvg-unfold");
-  });
+  })
+    .on("mouseover", function(){
+      $(".nvg").addClass("nvg-unfold");
+    });
 
   $(".nvg-directions_arrow-left").on("click touch", function(){
     carousel.trigger("prev.owl.carousel");

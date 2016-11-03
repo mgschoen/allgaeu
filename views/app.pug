@@ -3,7 +3,7 @@ html
     head
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible' content='IE=edge')
-        meta(name='viewport' content='width=device-width, initial-scale=1')
+        meta(name='viewport' content='width=device-width, initial-scale=1, user-scalable=no')
         title= title
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
         link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Walter+Turncoat|Jaldi')
@@ -14,7 +14,7 @@ html
         script(src='/plugins/owl-carousel/owl.carousel.min.js')
         script(src='/javascripts/allgaeu.min.js')
     body.app.app-background
-        section.welcome.hidden
+        section.welcome
             .container.app-container
                 .row.cvs-headline
                     .col-sm-12
@@ -105,7 +105,97 @@ html
                             img.img-responsive(src='/images/q12.jpg')
                     button.nvg-directions_arrow.nvg-directions_arrow-left <
                     button.nvg-directions_arrow.nvg-directions_arrow-right >
-        section.goodbye.hidden
+        section.quizpage#2323487235
+            .container.app-container
+                .row.cvs-headline
+                    .col-sm-12
+                        h1= title
+                .row
+                    .col-sm-8.cvs-imageBlock
+                        .row.cvs-imageBlock_image
+                            img.img-responsive(src='/images/welcome.JPG')
+                        .row.cvs-imageBlock_imageMeta
+                            span.col-sm-8.cvs-imageBlock_imageCaption
+                                | Definitiv Allgäu: Viehscheid in Bad Hindelang.
+                            span.col-sm-4.cvs-imageBlock_imageCredit
+                                | Foto: Flodur63 / Wikimedia Commons
+                    .col-sm-4.cvs-textBlock
+                        h2.negative Leider falsch
+                        p
+                            | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                            | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                            | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                            | aus wie zu Hause!
+                        h2.positive Doch richtig?
+                        p
+                            | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                            | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                            | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                            | aus wie zu Hause!
+                        button Weiter
+            .navbar.navbar-default.navbar-fixed-bottom.nvg.hidden
+                .nvg-counter
+                    .nvg-counter_inscription
+                        span.nvg-counter_inscription-textComponent 3
+                        span.nvg-counter_inscription-textComponent
+                            | &nbsp;von&nbsp;
+                        span.nvg-counter_inscription-textComponent 20
+                .container
+                    ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel2
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/welcome.JPG')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q1.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q2.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q3.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q4.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q5.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q6.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q7.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q8.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q9.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q10.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q11.jpg')
+                        li.nvg-imgList_item
+                            img.img-responsive(src='/images/q12.jpg')
+                    button.nvg-directions_arrow.nvg-directions_arrow-left <
+                    button.nvg-directions_arrow.nvg-directions_arrow-right >
+        section.goodbye
+            .container.app-container
+                .row.cvs-headline
+                    .col-sm-12
+                        h1= title
+                .row
+                    .col-sm-8.cvs-imageBlock
+                        .row.cvs-imageBlock_image
+                            img.img-responsive(src='/images/welcome.JPG')
+                        .row.cvs-imageBlock_imageMeta
+                            span.col-sm-8.cvs-imageBlock_imageCaption
+                                | Definitiv Allgäu: Viehscheid in Bad Hindelang.
+                            span.col-sm-4.cvs-imageBlock_imageCredit
+                                | Foto: Flodur63 / Wikimedia Commons
+                    .col-sm-4.cvs-textBlock.cvs-centeredTextBlock
+                        h2 Geschafft!
+                        p Du hast
+                        p
+                            span.cvs-textBlock_bigNumber 12
+                            span
+                                | &nbsp;von&nbsp;
+                            span.cvs-textBlock_bigNumber 20
+                            span
+                                | &nbsp;Bildern
+                        p richtig zugeordnet.
+                        button Nochmal von vorne
         .container.app-footer
             .row
                 .col-sm-12

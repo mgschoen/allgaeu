@@ -14,10 +14,6 @@
 
   &-imageBlock {
 
-    &_image {
-
-    }
-
     &_imageMeta {
       margin-top: 5px;
     }
@@ -51,7 +47,7 @@
 
   &-textBlock {
 
-    & button {
+    button {
       background: $color-neutral-medium;
       border: 2px solid $color-neutral-dark;
       border-radius: 1px;
@@ -89,6 +85,26 @@
         filter: saturate(0.5);
         opacity: 0.5;
       }
+    }
+
+    h2 {
+      margin-top: 6px;
+    }
+
+    .negative {
+      color: $color-negative-dark;
+    }
+
+    .positive {
+      color: $color-positive-dark;
+    }
+
+    &#{$cvs}-centeredTextBlock {
+      text-align: center;
+    }
+
+    &_bigNumber {
+      font-size: $font-highlight;
     }
   }
 }
