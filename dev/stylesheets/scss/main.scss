@@ -12,12 +12,13 @@ $color-negative:       #d88;
 $color-negative-hl:    #e99;
 $color-negative-dark:  #833;
 $color-black:          #000;
-$color-neutral-dark:   #333;
+$color-neutral-dark:   #4C5630;
 $color-neutral-shade:  #aaa;
 $color-neutral-medium: #ddd;
 $color-neutral-light:  #eaeaea;
 $color-white:          #fff;
 $color-transparent:    rgba(255,255,255,0);
+$color-background:     #B3C42F;
 
 // Font sizes
 $font-huge:      56px;
@@ -39,7 +40,7 @@ $fontfam-serif:   Times, serif;
   font-family: $fontfam-sans;
 
   &-background {
-    background: #eaeaea;
+    background: $color-background;
   }
 
   &-container {
@@ -56,6 +57,21 @@ $fontfam-serif:   Times, serif;
     margin-bottom: 100px;
     margin-top: 5px;
     text-align: center;
+  }
+
+  &-loadingScreen {
+    background: $color-background;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 10000000;
+  }
+
+  &-loadingScreen_image {
+    background: url('/images/allgaeu-load.svg') center center no-repeat;
+    height: 100%;
+    width: 100%;
   }
 }
 

@@ -11,7 +11,7 @@ app.run(['$rootScope', function($rootScope){
     'answersCorrect': 0,
     'currentIndex':   0,
     // Valid views are [ 'welcome', 'question', 'answer', 'goodbye' ]
-    'view':           'welcome'
+    'view':           'question'
   };
 
   // Information about the images and answers of the quiz
