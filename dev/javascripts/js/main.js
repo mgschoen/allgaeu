@@ -1,7 +1,7 @@
 // Determine whether navbar would occlude canvas.
 // If not: Show it!
 function unfoldNavbarIfPossible () {
-  var canvasHeight = $("section.quizpage")[0].offsetHeight;
+  var canvasHeight = $(".app-container")[0].offsetHeight;
   var canvasMarginTop = parseInt($(".app-container").css("margin-top").split("px")[0]);
   var viewportHeight = window.innerHeight;
   var navbarHeight = $(".nvg")[0].offsetHeight + $(".nvg-counter")[0].offsetHeight;

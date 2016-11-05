@@ -43,6 +43,10 @@ module.exports = function(grunt) {
         src: '<%= uglify.dist.dest %>',
         dest: 'public/javascripts/<%= pkg.name %>.min.js'
       },
+      angular: {
+        src: 'node_modules/angular/angular.min.js',
+        dest: 'public/plugins/angular/angular.js'
+      },
       md5: {
         src: 'node_modules/js-md5/build/md5.min.js',
         dest: 'public/plugins/js-md5/md5.min.js'

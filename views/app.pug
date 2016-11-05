@@ -11,10 +11,126 @@ html
         link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.theme.default.min.css')
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+    body.app.app-background(ng-app='allgaeu')
+        .container.app-container(ng-controller='canvasController')
+            .row.cvs-headline
+                .col-sm-12
+                    h1= title
+            .row
+                .col-sm-8.cvs-imageBlock
+                    .row.cvs-imageBlock_image
+                        img.img-responsive(src='/images/welcome.JPG')
+                    .row.cvs-imageBlock_imageMeta
+                        span.col-sm-8.cvs-imageBlock_imageCaption.cvs-imageBlock_imageCaption-blurred
+                            | Definitiv Allgäu: Viehscheid in Bad Hindelang.
+                        span.col-sm-4.cvs-imageBlock_imageCredit.cvs-imageBlock_imageCredit-blurred
+                            | Foto: Flodur63 / Wikimedia Commons
+                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "welcome" }}')
+                    p
+                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                        | aus wie zu Hause!
+
+                    p
+                        | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
+                        | diese Bilder aus dem Allgäu - oder nicht?
+
+                    button Quiz starten
+                    //p This is your api-ticket: #{apiTicket}
+                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "question" }}')
+                    p
+                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                        | aus wie zu Hause!
+
+                    p
+                        | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
+                        | diese Bilder aus dem Allgäu - oder nicht?
+
+                    button.positive.selected Allgäu
+                    button.negative.unselected Not Allgäu
+                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "answer" }}')
+                    h2.negative Leider falsch
+                    p
+                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                        | aus wie zu Hause!
+                    h2.positive Doch richtig?
+                    p
+                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
+                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
+                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
+                        | aus wie zu Hause!
+                    button Weiter
+                .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='{{ appState.view == "goodbye" }}')
+                    h2 Geschafft!
+                    p Du hast
+                    p
+                        span.cvs-textBlock_bigNumber 12
+                        span
+                            | &nbsp;von&nbsp;
+                        span.cvs-textBlock_bigNumber 20
+                        span
+                            | &nbsp;Bildern
+                    p richtig zugeordnet.
+                    button Nochmal von vorne
+        .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-show='{{ appState.view == "question" || appState.view == "answer"  }}')
+            .nvg-counter
+                .nvg-counter_inscription
+                    span.nvg-counter_inscription-textComponent 3
+                    span.nvg-counter_inscription-textComponent
+                        | &nbsp;von&nbsp;
+                    span.nvg-counter_inscription-textComponent 20
+            .container
+                ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/welcome.JPG')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q1.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q2.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q3.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q4.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q5.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q6.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q7.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q8.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q9.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q10.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q11.jpg')
+                    li.nvg-imgList_item
+                        img.img-responsive(src='/images/q12.jpg')
+                button.nvg-directions_arrow.nvg-directions_arrow-left <
+                button.nvg-directions_arrow.nvg-directions_arrow-right >
+        .container.app-footer
+            .row
+                .col-sm-12
+                    | &copy; #{year} Martin Schön &ndash;&nbsp;
+                    a(href='#') Impressum
         script(src='/plugins/owl-carousel/owl.carousel.min.js')
+        script(src='/plugins/angular/angular.js')
         script(src='/javascripts/allgaeu.min.js')
-    body.app.app-background
-        section.welcome
+
+
+
+
+
+
+
+
+        //section.welcome
             .container.app-container
                 .row.cvs-headline
                     .col-sm-12
@@ -41,7 +157,7 @@ html
 
                         button Quiz starten
                         //p This is your api-ticket: #{apiTicket}
-        section.quizpage#2323487234
+        //section.quizpage#2323487234
             .container.app-container
                 .row.cvs-headline
                     .col-sm-12
@@ -105,7 +221,7 @@ html
                             img.img-responsive(src='/images/q12.jpg')
                     button.nvg-directions_arrow.nvg-directions_arrow-left <
                     button.nvg-directions_arrow.nvg-directions_arrow-right >
-        section.quizpage#2323487235
+        //section.quizpage#2323487235
             .container.app-container
                 .row.cvs-headline
                     .col-sm-12
@@ -170,7 +286,7 @@ html
                             img.img-responsive(src='/images/q12.jpg')
                     button.nvg-directions_arrow.nvg-directions_arrow-left <
                     button.nvg-directions_arrow.nvg-directions_arrow-right >
-        section.goodbye
+        //section.goodbye
             .container.app-container
                 .row.cvs-headline
                     .col-sm-12
@@ -196,8 +312,11 @@ html
                                 | &nbsp;Bildern
                         p richtig zugeordnet.
                         button Nochmal von vorne
-        .container.app-footer
+        //.container.app-footer
             .row
                 .col-sm-12
                     | &copy; #{year} Martin Schön &ndash;&nbsp;
                     a(href='#') Impressum
+        //script(src='/plugins/owl-carousel/owl.carousel.min.js')
+        //script(src='/plugins/angular/angular.min.js')
+        //script(src='/javascripts/allgaeu.min.js')
