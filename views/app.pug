@@ -1,17 +1,18 @@
 doctype html
-html
+html(ng-app='allgaeu')
     head
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible' content='IE=edge')
         meta(name='viewport' content='width=device-width, initial-scale=1, user-scalable=no')
         title= title
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
-        link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Walter+Turncoat|Jaldi')
         link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.carousel.min.css')
         link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.theme.default.min.css')
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
-    body.app.app-background(ng-app='allgaeu')
+    body.app.app-background(ng-controller='mainController')
+
+        // canvas start
         .container.app-container(ng-controller='canvasController')
             .row.cvs-headline
                 .col-sm-12
@@ -19,101 +20,59 @@ html
             .row
                 .col-sm-8.cvs-imageBlock
                     .row.cvs-imageBlock_image
-                        img.img-responsive(src='/images/welcome.JPG')
+                        img.img-responsive(ng-src='{{ currentImage().src }}')
                     .row.cvs-imageBlock_imageMeta
-                        span.col-sm-8.cvs-imageBlock_imageCaption.cvs-imageBlock_imageCaption-blurred
-                            | Definitiv Allgäu: Viehscheid in Bad Hindelang.
-                        span.col-sm-4.cvs-imageBlock_imageCredit.cvs-imageBlock_imageCredit-blurred
-                            | Foto: Flodur63 / Wikimedia Commons
-                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "welcome" }}')
-                    p
-                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
-                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
-                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
-                        | aus wie zu Hause!
+                        span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImage().caption')
+                        span.col-sm-4.cvs-imageBlock_imageCredit
+                            | Foto: {{ currentImage().credit }}
 
-                    p
-                        | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
-                        | diese Bilder aus dem Allgäu - oder nicht?
-
-                    button Quiz starten
+                // welcome view
+                .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
+                    div(ng-bind-html='welcome.text')
+                    button(ng-click='advance()') Quiz starten
                     //p This is your api-ticket: #{apiTicket}
-                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "question" }}')
-                    p
-                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
-                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
-                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
-                        | aus wie zu Hause!
 
-                    p
-                        | Glaubst du nicht? Dann sieh dir diese Bilder an und sag uns: Stammen
-                        | diese Bilder aus dem Allgäu - oder nicht?
+                // question view
+                .col-sm-4.cvs-textBlock(ng-show='appState.view == "question"')
+                    div(ng-bind-html='currentQuestion()')
+                    button.positive(ng-click='answer(true)') Allgäu
+                    button.negative(ng-click='answer(false)') Not Allgäu
 
-                    button.positive.selected Allgäu
-                    button.negative.unselected Not Allgäu
-                .col-sm-4.cvs-textBlock(ng-show='{{ appState.view == "answer" }}')
-                    h2.negative Leider falsch
-                    p
-                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
-                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
-                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
-                        | aus wie zu Hause!
-                    h2.positive Doch richtig?
-                    p
-                        | Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge,
-                        | die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist
-                        | er durch die Welt und ihm schwirrt der Kopf: Es sieht ja überall so
-                        | aus wie zu Hause!
-                    button Weiter
-                .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='{{ appState.view == "goodbye" }}')
+                // answer view
+                .col-sm-4.cvs-textBlock(ng-show='appState.view == "answer"')
+                    h2.negative(ng-show='!currentAnswerCorrect()') Leider falsch
+                    h2.positive(ng-show='currentAnswerCorrect()') Richtig!
+                    div(ng-bind-html='currentExplanation()')
+                    button(ng-click='advance()') Weiter
+
+                // goodbye view
+                .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='appState.view == "goodbye"')
                     h2 Geschafft!
                     p Du hast
                     p
-                        span.cvs-textBlock_bigNumber 12
+                        span.cvs-textBlock_bigNumber(ng-bind='appState.answersCorrect')
                         span
                             | &nbsp;von&nbsp;
-                        span.cvs-textBlock_bigNumber 20
+                        span.cvs-textBlock_bigNumber(ng-bind='content.length')
                         span
                             | &nbsp;Bildern
                     p richtig zugeordnet.
                     button Nochmal von vorne
-        .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-show='{{ appState.view == "question" || appState.view == "answer"  }}')
-            .nvg-counter
+
+        // navbar start
+        .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-controller='navbarController', ng-show='appState.view == "question" || appState.view == "answer"')
+            .nvg-counter(ng-click='toggleNavbarUnfolding()', ng-mouseover='unfoldNavbar()')
                 .nvg-counter_inscription
-                    span.nvg-counter_inscription-textComponent 3
+                    span.nvg-counter_inscription-textComponent(ng-bind='appState.currentIndex + 1')
                     span.nvg-counter_inscription-textComponent
                         | &nbsp;von&nbsp;
-                    span.nvg-counter_inscription-textComponent 20
+                    span.nvg-counter_inscription-textComponent(ng-bind='content.length')
             .container
                 ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/welcome.JPG')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q1.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q2.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q3.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q4.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q5.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q6.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q7.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q8.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q9.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q10.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q11.jpg')
-                    li.nvg-imgList_item
-                        img.img-responsive(src='/images/q12.jpg')
-                button.nvg-directions_arrow.nvg-directions_arrow-left <
-                button.nvg-directions_arrow.nvg-directions_arrow-right >
+                    li.nvg-imgList_item(ng-repeat='question in content')
+                        img.img-responsive(ng-src='{{ question.img.thumb }}')
+                button.nvg-directions_arrow.nvg-directions_arrow-left(ng-click='previousQuestion()') <
+                button.nvg-directions_arrow.nvg-directions_arrow-right(ng-click='nextQuestion()') >
         .container.app-footer
             .row
                 .col-sm-12
@@ -122,5 +81,19 @@ html
         .app-loadingScreen(ng-if='false')
             .app-loadingScreen_image
         script(src='/plugins/owl-carousel/owl.carousel.min.js')
-        script(src='/plugins/angular/angular.js')
+        script(src='/plugins/angular/angular-core-sanitize.min.js')
         script(src='/javascripts/allgaeu.min.js')
+        // debugging stuff
+        //.container
+            pre
+                h4 appState
+                p view:&nbsp;
+                        span(ng-bind='appState.view')
+                p currentIndex:&nbsp;
+                    span(ng-bind='appState.currentIndex')
+                p answersCorrect:&nbsp;
+                    span(ng-bind='appState.answersCorrect')
+                p
+                    span(ng-repeat='question in content')
+                        b q{{ question.sortIndex }}&nbsp;
+                        | isAllgaeu:{{ question.isAllgaeu }}&nbsp;answered:{{ question.answered }}&nbsp;answerGiven:{{ question.answerGiven }}&nbsp;<br>

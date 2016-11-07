@@ -12,13 +12,16 @@ $color-negative:       #d88;
 $color-negative-hl:    #e99;
 $color-negative-dark:  #833;
 $color-black:          #000;
-$color-neutral-dark:   #4C5630;
+$color-neutral-dark:   #333;
 $color-neutral-shade:  #aaa;
 $color-neutral-medium: #ddd;
 $color-neutral-light:  #eaeaea;
 $color-white:          #fff;
 $color-transparent:    rgba(255,255,255,0);
-$color-background:     #B3C42F;
+//$color-background:     url(/images/background.jpg);
+$color-background:     #eaeaea;
+
+@import 'fonts';
 
 // Font sizes
 $font-huge:      56px;

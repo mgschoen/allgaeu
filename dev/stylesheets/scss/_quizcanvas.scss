@@ -77,15 +77,6 @@
           background: $color-positive-hl;
         }
       }
-
-      &.selected {
-        box-shadow: 0 0 5px 0 $color-neutral-shade;
-      }
-
-      &.unselected {
-        filter: saturate(0.5);
-        opacity: 0.5;
-      }
     }
 
     h2 {

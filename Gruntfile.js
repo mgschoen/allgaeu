@@ -18,6 +18,10 @@ module.exports = function(grunt) {
       dist: {
         src: ['dev/javascripts/js/*.js'],
         dest: 'dev/javascripts/concatenated/<%= pkg.name %>.js'
+      },
+      angular: {
+        src: ['node_modules/angular/angular.min.js', 'node_modules/angular-sanitize/angular-sanitize.min.js'],
+        dest: 'public/plugins/angular/angular-core-sanitize.min.js'
       }
     },
     uglify: {
@@ -42,10 +46,6 @@ module.exports = function(grunt) {
       js: {
         src: '<%= uglify.dist.dest %>',
         dest: 'public/javascripts/<%= pkg.name %>.min.js'
-      },
-      angular: {
-        src: 'node_modules/angular/angular.min.js',
-        dest: 'public/plugins/angular/angular.js'
       },
       md5: {
         src: 'node_modules/js-md5/build/md5.min.js',
