@@ -3,7 +3,7 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
   /**
    * Callback firing when the 'changed.owl.carousel' event was detected on the carousel.
    * Not to be called outside the event handler.
-   * @param event JS event object
+   * @param event - JS event object
    */
   $scope.carouselChanged = function (event) {
     var carouselIndex = event.item.index;
@@ -12,6 +12,27 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
         $scope.goToQuestion(carouselIndex);
       });
     }
+  };
+
+  /**
+   * Callback firing when a click event occurs on an .owl-item. Not to be called outside
+   * the event handler.
+   * @param event - JS event object
+   */
+  $scope.carouselItemClicked = function (event) {
+    var targetElement = $(event.target.closest('.owl-item'));
+    var index = targetElement.index();
+    $(".nvg-imgList_item.selected").removeClass("selected").addClass("unselected");
+    targetElement.find(".nvg-imgList_item").removeClass("unselected").addClass("selected");
+    $scope.carousel.trigger("to.owl.carousel", index);
+  };
+
+  $scope.toggleNavbarUnfolding = function () {
+    $(".nvg").toggleClass("nvg-unfold");
+  };
+
+  $scope.unfoldNavbar = function () {
+    $(".nvg").addClass("nvg-unfold");
   };
 
   /**
@@ -28,14 +49,6 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
     } else {
       $(".nvg").removeClass("nvg-unfold");
     }
-  };
-
-  $scope.toggleNavbarUnfolding = function () {
-    $(".nvg").toggleClass("nvg-unfold");
-  };
-
-  $scope.unfoldNavbar = function () {
-    $(".nvg").addClass("nvg-unfold");
   };
 
   /**
@@ -68,13 +81,16 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
 
     $scope.unfoldNavbarIfPossible();
 
-    // On every change of appState.currentIndex, move the carousel to the new position
+    // On every change of appState.currentIndex move the carousel to the new position
     $scope.$watch('appState.currentIndex', function(){
       $scope.carousel.trigger('to.owl.carousel', [$scope.appState.currentIndex]);
     });
 
-    // On every change in the owl carousel
+    // On every change in the carousel call the navbarController.carouselChanged() method
     $(document).on('changed.owl.carousel', $scope.carousel, $scope.carouselChanged);
+
+    // On every click on a carousel item jump to that item
+    $(document).on('click', '.owl-item', $scope.carouselItemClicked);
 
     // On every window resize check if the navbar still fits without occluding content
     $(window).resize($scope.unfoldNavbarIfPossible);
@@ -82,13 +98,6 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
     // On every scroll hide the navbar
     $(document).on("scroll", function(){
       $(".nvg").removeClass("nvg-unfold");
-    });
-
-    $(".owl-item").on("click touch", function(){
-      var index = $(this).index();
-      $(".nvg-imgList_item.selected").removeClass("selected").addClass("unselected");
-      $(this).find(".nvg-imgList_item").removeClass("unselected").addClass("selected");
-      $scope.carousel.trigger("to.owl.carousel", index);
     });
 
   });
