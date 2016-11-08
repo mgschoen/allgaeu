@@ -23,8 +23,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Julia Buchmaier',
-        'loaded':    false,
-        'loading':   false,
         'src': {
           'loaded':  false,
           'loading': false,
@@ -47,8 +45,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Julia Buchmaier',
-        'loaded':    false,
-        'loading':   false,
         'src': {
           'loaded':  false,
           'loading': false,
@@ -71,8 +67,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Mike Milligan',
-        'loaded':    false,
-        'loading':   false,
         'src': {
           'loaded':  false,
           'loading': false,
@@ -95,8 +89,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'img': {
       'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
       'credit':    'Flodur63 / Wikimedia Commons',
-      'loaded':    false,
-      'loading':   false,
       'src': {
         'loaded':  false,
         'loading': false,
@@ -110,8 +102,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'img': {
       'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
       'credit':    'Flodur63 / Wikimedia Commons',
-      'loaded':    false,
-      'loading':   false,
       'src': {
         'loaded':  false,
         'loading': false,
@@ -205,6 +195,19 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     var currentIndex = $scope.appState.currentIndex;
     if (currentIndex > 0) {
       $scope.goToQuestion(currentIndex - 1);
+    }
+  };
+
+  /**
+   * Restarts the game by setting all game logic related values to default
+   * */
+  $scope.resetGame = function () {
+    $scope.appState.view = 'welcome';
+    $scope.appState.currentIndex = 0;
+    $scope.appState.answersCorrect = 0;
+    for (var i=0; i<$scope.content.length; i++) {
+      $scope.content[i].answered = false;
+      $scope.content[i].answerGiven = null;
     }
   };
 

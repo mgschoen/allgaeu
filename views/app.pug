@@ -63,7 +63,7 @@ html(ng-app='allgaeu')
                             span
                                 | &nbsp;Bildern
                         p richtig zugeordnet.
-                        button Nochmal von vorne
+                        button(ng-click='resetGame()') Nochmal von vorne
 
             // navbar start
             .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-controller='navbarController', ng-show='appState.navbarEnabled')
