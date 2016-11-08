@@ -8,7 +8,7 @@
     & h1 {
       color: $color-neutral-dark;
       font-size: $font-big;
-      font-family: $fontfam-slant;
+      font-family: $fontfam-slant-default;
       margin-top: 0;
     }
   }
@@ -52,7 +52,7 @@
       background: $color-neutral-medium;
       border: 2px solid $color-neutral-dark;
       border-radius: 1px;
-      font-family: $fontfam-slant;
+      font-family: $fontfam-slant-default;
       margin: 5px auto;
       padding: 5px 0;
       transition: box-shadow 0.5s, filter 0.5s, opacity 0.5s;
@@ -132,5 +132,12 @@
         }
       }
     }
+  }
+}
+
+html.wf-active #{$cvs} {
+
+  &-headline h1, &-textBlock button {
+    font-family: $fontfam-slant;
   }
 }

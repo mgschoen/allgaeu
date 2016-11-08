@@ -1,6 +1,3 @@
-// Init angular app with root scope
-var app = angular.module('allgaeu', ['ngSanitize']);
-
 app.controller('mainController', [ '$scope', '$log', function($scope, $log){
 
   /** * * * * * * * * * * * *
@@ -9,10 +6,12 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
 
   // Information about the current state of the app
   $scope.appState = {
-    'answersCorrect': 0,
-    'currentIndex':   0,
-    // Valid views are [ 'welcome', 'question', 'answer', 'goodbye' ]
-    'view':           'welcome'
+    'answersCorrect':     0,
+    'currentIndex':       0,
+    'fontsLoaded':        false,
+    'navbarImagesLoaded': false,
+    'navbarEnabled':      false,
+    'view':               'welcome' // Valid views are [ 'welcome', 'question', 'answer', 'goodbye' ]
   };
 
   // Information about the images and answers of the quiz
@@ -24,8 +23,18 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Julia Buchmaier',
-        'src':       '/images/q1.jpg',
-        'thumb':     '/images/q1.jpg'
+        'loaded':    false,
+        'loading':   false,
+        'src': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q1.jpg?cache=' + ( new Date() ).getTime()
+        },
+        'thumb': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q1_thumb.jpg?cache=' + ( new Date() ).getTime()
+        }
       },
       'isAllgaeu':   false,
       'question':    '<p>Ein erster Versuch: Wurde dieses Bild im Allgäu gemacht oder nicht?</p>',
@@ -38,8 +47,18 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Julia Buchmaier',
-        'src':       '/images/q2.jpg',
-        'thumb':     '/images/q2.jpg'
+        'loaded':    false,
+        'loading':   false,
+        'src': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q2.jpg?cache=' + ( new Date() ).getTime()
+        },
+        'thumb': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q2_thumb.jpg?cache=' + ( new Date() ).getTime()
+        }
       },
       'isAllgaeu':   false,
       'question':    '<p>Ein zweiter Versuch: Wurde dieses Bild im Allgäu gemacht oder nicht?</p>',
@@ -52,8 +71,18 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'img': {
         'caption':   'Lorem ipsum dolor sit amet',
         'credit':    'Mike Milligan',
-        'src':       '/images/q3.jpg',
-        'thumb':     '/images/q3.jpg'
+        'loaded':    false,
+        'loading':   false,
+        'src': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q3.jpg?cache=' + ( new Date() ).getTime()
+        },
+        'thumb': {
+          'loaded':  false,
+          'loading': false,
+          'url':     '/images/q3_thumb.jpg?cache=' + ( new Date() ).getTime()
+        }
       },
       'isAllgaeu':   false,
       'question':    '<p>Ein dritter Versuch: Wurde dieses Bild im Allgäu gemacht oder nicht?</p>',
@@ -66,7 +95,13 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'img': {
       'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
       'credit':    'Flodur63 / Wikimedia Commons',
-      'src':       '/images/welcome.JPG'
+      'loaded':    false,
+      'loading':   false,
+      'src': {
+        'loaded':  false,
+        'loading': false,
+        'url':     '/images/welcome.JPG?cache=' + ( new Date() ).getTime()
+      }
     }
   };
 
@@ -75,7 +110,13 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'img': {
       'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
       'credit':    'Flodur63 / Wikimedia Commons',
-      'src':       '/images/welcome.JPG'
+      'loaded':    false,
+      'loading':   false,
+      'src': {
+        'loaded':  false,
+        'loading': false,
+        'url':     '/images/welcome.JPG?cache=' + ( new Date() ).getTime()
+      }
     },
     'text':      '<p>Grüne Hügel, braunes Vieh, massive Berge, hölzerne Hütten - Dinge, ' +
     'die der gemeine Allgäuer mit seiner Heimat verbindet. Dann reist er durch die Welt und ihm ' +
@@ -91,16 +132,29 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
    * Advances the app to the next step in the natural app flow
    * */
   $scope.advance = function(){
-    if ($scope.appState.view === 'welcome') {
+    var view = $scope.appState.view;
+    var currentIndex = $scope.appState.currentIndex;
+    var questionsTotal = $scope.content.length;
+    if (view === 'welcome') {
       $scope.appState.view = 'question';
-    } else if ($scope.appState.view === 'answer') {
-      var appState = $scope.appState;
-      var questionsTotal = $scope.content.length;
-      if (appState.currentIndex < questionsTotal - 1) {
-        $scope.goToQuestion(appState.currentIndex + 1);
-      } else {
-        appState.view = 'goodbye';
+      $scope.appState.navbarEnabled = true;
+    } else if (view === 'answer' && currentIndex === questionsTotal - 1) {
+      var firstNotAnsweredIndex = -1;
+      for (var i=0; i<$scope.content.length; i++) {
+        if (!$scope.content[i].answered) {
+          firstNotAnsweredIndex = i;
+          break;
+        }
       }
+      if (firstNotAnsweredIndex > -1 &&
+        !window.confirm('Du hast noch nicht alle Fragen beantwortet. Wirklich fortfahren?')) {
+        $scope.goToQuestion(firstNotAnsweredIndex);
+      } else {
+        $scope.appState.view = 'goodbye';
+        $scope.appState.navbarEnabled = false;
+      }
+    } else if (view === 'answer') {
+      $scope.goToQuestion(currentIndex + 1);
     }
   };
 
@@ -153,5 +207,16 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       $scope.goToQuestion(currentIndex - 1);
     }
   };
+
+  WebFont.load({
+    google: {
+      families: ['Jaldi:400,700', 'Walter Turncoat']
+    },
+    active: function(){
+      $scope.$apply(function(){
+        $scope.appState.fontsLoaded = true;
+      });
+    }
+  });
 
 }]);

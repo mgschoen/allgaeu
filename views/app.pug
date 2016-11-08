@@ -10,90 +10,89 @@ html(ng-app='allgaeu')
         link(rel='stylesheet' href='/plugins/owl-carousel/assets/owl.theme.default.min.css')
         link(rel='stylesheet' href='/stylesheets/style.css')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+        script(src='https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js')
     body.app.app-background(ng-controller='mainController')
 
-        // canvas start
-        .container.app-container(ng-controller='canvasController')
-            .row.cvs-headline
-                .col-sm-12
-                    h1= title
-            .row
-                .col-sm-8.cvs-imageBlock
-                    .row.cvs-imageBlock_image
-                        img.img-responsive(ng-src='{{ currentImage().src }}')
-                    .row.cvs-imageBlock_imageMeta
-                        span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImage().caption')
-                        span.col-sm-4.cvs-imageBlock_imageCredit
-                            | Foto: {{ currentImage().credit }}
-
-                // welcome view
-                .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
-                    div(ng-bind-html='welcome.text')
-                    button(ng-click='advance()') Quiz starten
-                    //p This is your api-ticket: #{apiTicket}
-
-                // question view
-                .col-sm-4.cvs-textBlock(ng-show='appState.view == "question"')
-                    div(ng-bind-html='currentQuestion()')
-                    button.positive(ng-click='answer(true)') Allgäu
-                    button.negative(ng-click='answer(false)') Not Allgäu
-
-                // answer view
-                .col-sm-4.cvs-textBlock(ng-show='appState.view == "answer"')
-                    h2.negative(ng-show='!currentAnswerCorrect()') Leider falsch
-                    h2.positive(ng-show='currentAnswerCorrect()') Richtig!
-                    div(ng-bind-html='currentExplanation()')
-                    button(ng-click='advance()') Weiter
-
-                // goodbye view
-                .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='appState.view == "goodbye"')
-                    h2 Geschafft!
-                    p Du hast
-                    p
-                        span.cvs-textBlock_bigNumber(ng-bind='appState.answersCorrect')
-                        span
-                            | &nbsp;von&nbsp;
-                        span.cvs-textBlock_bigNumber(ng-bind='content.length')
-                        span
-                            | &nbsp;Bildern
-                    p richtig zugeordnet.
-                    button Nochmal von vorne
-
-        // navbar start
-        .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-controller='navbarController', ng-show='appState.view == "question" || appState.view == "answer"')
-            .nvg-counter(ng-click='toggleNavbarUnfolding()', ng-mouseover='unfoldNavbar()')
-                .nvg-counter_inscription
-                    span.nvg-counter_inscription-textComponent(ng-bind='appState.currentIndex + 1')
-                    span.nvg-counter_inscription-textComponent
-                        | &nbsp;von&nbsp;
-                    span.nvg-counter_inscription-textComponent(ng-bind='content.length')
-            .container
-                ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel
-                    li.nvg-imgList_item(ng-repeat='question in content')
-                        img.img-responsive(ng-src='{{ question.img.thumb }}')
-                button.nvg-directions_arrow.nvg-directions_arrow-left(ng-click='previousQuestion()') <
-                button.nvg-directions_arrow.nvg-directions_arrow-right(ng-click='nextQuestion()') >
-        .container.app-footer
-            .row
-                .col-sm-12
-                    | &copy; #{year} Martin Schön &ndash;&nbsp;
-                    a(href='#') Impressum
-        .app-loadingScreen(ng-if='false')
+        .app-loadingScreen(ng-hide='appState.fontsLoaded')
             .app-loadingScreen_image
+
+        .app-wrapper(ng-show='appState.fontsLoaded')
+            // canvas start
+            .container.app-container(ng-controller='canvasController')
+                .row.cvs-headline
+                    .col-sm-12
+                        h1= title
+                .row
+                    .col-sm-8.cvs-imageBlock
+                        .row.cvs-imageBlock_image
+                            img.img-responsive(src='/images/allgaeu-load-img.svg', ng-hide='currentImage().src.loaded')
+                            img.img-responsive(ng-src='{{ currentImage().src.url }}', ng-show='currentImage().src.loaded')
+                        .row.cvs-imageBlock_imageMeta
+                            span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImage().caption')
+                            span.col-sm-4.cvs-imageBlock_imageCredit
+                                | Foto: {{ currentImage().credit }}
+
+                    // welcome view
+                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
+                        div(ng-bind-html='welcome.text')
+                        button(ng-click='advance()') Quiz starten
+                        //p This is your api-ticket: #{apiTicket}
+
+                    // question view
+                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "question"')
+                        div(ng-bind-html='currentQuestion()')
+                        button.positive(ng-click='answer(true)') Allgäu
+                        button.negative(ng-click='answer(false)') Not Allgäu
+
+                    // answer view
+                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "answer"')
+                        h2.negative(ng-show='!currentAnswerCorrect()') Leider falsch
+                        h2.positive(ng-show='currentAnswerCorrect()') Richtig!
+                        div(ng-bind-html='currentExplanation()')
+                        button(ng-bind='currentAdvanceLabel()', ng-click='advance()')
+
+                    // goodbye view
+                    .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='appState.view == "goodbye"')
+                        h2 Geschafft!
+                        p Du hast
+                        p
+                            span.cvs-textBlock_bigNumber(ng-bind='appState.answersCorrect')
+                            span
+                                | &nbsp;von&nbsp;
+                            span.cvs-textBlock_bigNumber(ng-bind='content.length')
+                            span
+                                | &nbsp;Bildern
+                        p richtig zugeordnet.
+                        button Nochmal von vorne
+
+            // navbar start
+            .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-controller='navbarController', ng-show='appState.navbarEnabled')
+                .nvg-counter(ng-click='toggleNavbarUnfolding()', ng-mouseover='unfoldNavbar()')
+                    .nvg-counter_inscription
+                        span.nvg-counter_inscription-textComponent(ng-bind='appState.currentIndex + 1')
+                        span.nvg-counter_inscription-textComponent
+                            | &nbsp;von&nbsp;
+                        span.nvg-counter_inscription-textComponent(ng-bind='content.length')
+                .container
+                    ul.nav.navbar-nav.nvg-imgList.owl-carousel#navcarousel
+                        li.nvg-imgList_item(ng-repeat='question in content')
+                            img.img-responsive(src='/images/allgaeu-load-img-thumb.svg', ng-hide='question.img.thumb.loaded')
+                            img.img-responsive(ng-src='{{ question.img.thumb.url }}', ng-if='question.img.thumb.loaded')
+                    button.nvg-directions_arrow.nvg-directions_arrow-left(ng-click='previousQuestion()') <
+                    button.nvg-directions_arrow.nvg-directions_arrow-right(ng-click='nextQuestion()') >
+            .container.app-footer
+                .row
+                    .col-sm-12
+                        | &copy; #{year} Martin Schön &ndash;&nbsp;
+                        a(href='#') Impressum
         script(src='/plugins/owl-carousel/owl.carousel.min.js')
         script(src='/plugins/angular/angular-core-sanitize.min.js')
         script(src='/javascripts/allgaeu.min.js')
         // debugging stuff
-        //.container
+        .container
             pre
                 h4 appState
-                p view:&nbsp;
-                        span(ng-bind='appState.view')
-                p currentIndex:&nbsp;
-                    span(ng-bind='appState.currentIndex')
-                p answersCorrect:&nbsp;
-                    span(ng-bind='appState.answersCorrect')
-                p
-                    span(ng-repeat='question in content')
-                        b q{{ question.sortIndex }}&nbsp;
-                        | isAllgaeu:{{ question.isAllgaeu }}&nbsp;answered:{{ question.answered }}&nbsp;answerGiven:{{ question.answerGiven }}&nbsp;<br>
+                p fontsLoaded:&nbsp;
+                    span(ng-bind='appState.fontsLoaded')
+                p canvasImageLoaded:&nbsp;
+                    span(ng-bind='appState.canvasImageLoaded')

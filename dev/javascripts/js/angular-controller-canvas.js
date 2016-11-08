@@ -1,4 +1,17 @@
-app.controller('canvasController', [ '$scope', function($scope){
+app.controller('canvasController', ['$scope', '$log', 'preloader', function($scope, $log, preloader){
+
+  $scope.canvasImageLazyPreload = function(imgObject) {
+    if (!imgObject.src.loaded && !imgObject.src.loading) {
+      $log.log('Loading ' + imgObject.src.url + '...');
+      imgObject.src.loading = true;
+      preloader.preloadImages([imgObject.src.url])
+        .then(function(){
+          imgObject.src.loaded = true;
+          imgObject.src.loading = false;
+          $log.log('Done loading ' + imgObject.src.url);
+        });
+    }
+  };
 
   $scope.currentExplanation = function(){
     return $scope.content[$scope.appState.currentIndex].explanation;
@@ -6,13 +19,22 @@ app.controller('canvasController', [ '$scope', function($scope){
 
   $scope.currentImage = function(){
     var appState = $scope.appState;
+    var img = null;
     if (appState.view === 'welcome') {
-      return $scope.welcome.img;
+      img = $scope.welcome.img;
     } else if (appState.view === 'goodbye') {
-      return $scope.goodbye.img;
+      img = $scope.goodbye.img;
     } else {
-      return $scope.content[appState.currentIndex].img;
+      img = $scope.content[appState.currentIndex].img;
     }
+    if (!img.src.loaded && !img.src.loading) {
+      $scope.canvasImageLazyPreload(img);
+    }
+    return img;
+  };
+
+  $scope.currentAdvanceLabel = function () {
+    return ($scope.appState.currentIndex === $scope.content.length - 1) ? 'Zur Auswertung' : 'Weiter';
   };
 
   $scope.currentQuestion = function(){

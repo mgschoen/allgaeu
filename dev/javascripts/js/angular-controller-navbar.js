@@ -1,4 +1,18 @@
-app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
+app.controller('navbarController', [ '$scope', '$log', 'preloader', function($scope, $log, preloader){
+
+  $scope.navbarImageLazyPreload = function(imgObject) {
+    if (!imgObject.thumb.loaded && !imgObject.thumb.loading) {
+      $log.log('Loading ' + imgObject.thumb.url + '...');
+      imgObject.thumb.loading = true;
+      preloader.preloadImages([imgObject.thumb.url])
+        .then(function(){
+          imgObject.thumb.loaded = true;
+          imgObject.thumb.loading = false;
+          $scope.appState.imagesLoading -= 1;
+          $log.log('Done loading ' + imgObject.thumb.url);
+        });
+    }
+  };
 
   /**
    * Callback firing when the 'changed.owl.carousel' event was detected on the carousel.
@@ -50,6 +64,14 @@ app.controller('navbarController', [ '$scope', '$log', function($scope, $log){
       $(".nvg").removeClass("nvg-unfold");
     }
   };
+
+  $scope.$watch('appState.navbarEnabled', function(){
+    if ($scope.appState.navbarEnabled) {
+      for (var i=0; i<$scope.content.length; i++) {
+        $scope.navbarImageLazyPreload($scope.content[i].img);
+      }
+    }
+  });
 
   /**
    * Initialize the owl-carousel plugin

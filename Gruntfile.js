@@ -47,6 +47,10 @@ module.exports = function(grunt) {
         src: '<%= uglify.dist.dest %>',
         dest: 'public/javascripts/<%= pkg.name %>.min.js'
       },
+      jspretty: {
+        src: '<%= concat.dist.dest %>',
+        dest: 'public/javascripts/<%= pkg.name %>.min.js'
+      },
       md5: {
         src: 'node_modules/js-md5/build/md5.min.js',
         dest: 'public/plugins/js-md5/md5.min.js'
@@ -125,5 +129,6 @@ module.exports = function(grunt) {
 
   // Default task. Builds static .css and .js files.
   grunt.registerTask('default', ['sass', 'concat', 'uglify', 'copy']);
+  grunt.registerTask('jspretty', ['concat', 'copy:jspretty']);
 
 };

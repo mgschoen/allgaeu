@@ -18,10 +18,6 @@ $color-neutral-medium: #ddd;
 $color-neutral-light:  #eaeaea;
 $color-white:          #fff;
 $color-transparent:    rgba(255,255,255,0);
-//$color-background:     url(/images/background.jpg);
-$color-background:     #eaeaea;
-
-@import 'fonts';
 
 // Font sizes
 $font-huge:      56px;
@@ -33,17 +29,19 @@ $font-mini:      14px;
 $font-micro:     12px;
 
 // Font families
-$fontfam-slant:   'Walter Turncoat', cursive;
-$fontfam-sans:    Jaldi, Arial, sans-serif;
-$fontfam-serif:   Times, serif;
+$fontfam-slant:         'Walter Turncoat';
+$fontfam-slant-default: cursive;
+$fontfam-sans:          Jaldi;
+$fontfam-sans-default:  Arial, sans-serif;
+$fontfam-serif:         Times, serif;
 
 
 #{$app} {
 
-  font-family: $fontfam-sans;
+  font-family: $fontfam-sans-default;
 
   &-background {
-    background: $color-background;
+    background: $color-neutral-light;
   }
 
   &-container {
@@ -63,7 +61,7 @@ $fontfam-serif:   Times, serif;
   }
 
   &-loadingScreen {
-    background: $color-background;
+    background: $color-neutral-light;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -108,6 +106,10 @@ $fontfam-serif:   Times, serif;
       box-shadow: none;
     }
   }
+}
+
+html.wf-active #{$app} {
+  font-family: $fontfam-sans;
 }
 
 @import 'navigation';
