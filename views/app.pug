@@ -19,51 +19,52 @@ html(ng-app='allgaeu')
         .app-wrapper(ng-show='appState.fontsLoaded')
             // canvas start
             .container.app-container(ng-controller='canvasController')
-                .row.cvs-headline
-                    .col-sm-12
-                        h1= title
-                .row
-                    .col-sm-8.cvs-imageBlock
-                        .row.cvs-imageBlock_image
-                            img.img-responsive(src='/images/allgaeu-load-img.svg', ng-hide='currentImage().src.loaded')
-                            img.img-responsive(ng-src='{{ currentImage().src.url }}', ng-show='currentImage().src.loaded')
-                        .row.cvs-imageBlock_imageMeta
-                            span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImageMeta().caption', ng-class='currentImageMeta().captionCssClass')
-                            span.col-sm-4.cvs-imageBlock_imageCredit(ng-class='currentImageMeta().creditCssClass')
-                                | Foto: {{ currentImageMeta().credit }}
+                .cvs.app-container_canvas(ng-class='transitionClass()')
+                    .row.cvs-headline
+                        .col-sm-12
+                            h1= title
+                    .row
+                        .col-sm-8.cvs-imageBlock
+                            .row.cvs-imageBlock_image
+                                img.img-responsive(src='/images/allgaeu-load-img.svg', ng-hide='currentImage().src.loaded')
+                                img.img-responsive(ng-src='{{ currentImage().src.url }}', ng-show='currentImage().src.loaded')
+                            .row.cvs-imageBlock_imageMeta
+                                span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImageMeta().caption', ng-class='currentImageMeta().captionCssClass')
+                                span.col-sm-4.cvs-imageBlock_imageCredit(ng-class='currentImageMeta().creditCssClass')
+                                    | Foto: {{ currentImageMeta().credit }}
 
-                    // welcome view
-                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
-                        div(ng-bind-html='welcome.text')
-                        button(ng-click='advance()') Quiz starten
-                        //p This is your api-ticket: #{apiTicket}
+                        // welcome view
+                        .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
+                            div(ng-bind-html='welcome.text')
+                            button(ng-click='advance()') Quiz starten
+                            //p This is your api-ticket: #{apiTicket}
 
-                    // question view
-                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "question"')
-                        div(ng-bind-html='currentQuestion()')
-                        button.positive(ng-click='answer(true)') Allgäu
-                        button.negative(ng-click='answer(false)') Not Allgäu
+                        // question view
+                        .col-sm-4.cvs-textBlock(ng-show='appState.view == "question"')
+                            div(ng-bind-html='currentQuestion()')
+                            button.positive(ng-click='answer(true)') Allgäu
+                            button.negative(ng-click='answer(false)') Not Allgäu
 
-                    // answer view
-                    .col-sm-4.cvs-textBlock(ng-show='appState.view == "answer"')
-                        h2.negative(ng-show='!currentAnswerCorrect()') Leider falsch
-                        h2.positive(ng-show='currentAnswerCorrect()') Richtig!
-                        div(ng-bind-html='currentExplanation()')
-                        button(ng-bind='currentAdvanceLabel()', ng-click='advance()')
+                        // answer view
+                        .col-sm-4.cvs-textBlock(ng-show='appState.view == "answer"')
+                            h2.negative(ng-show='!currentAnswerCorrect()') Leider falsch
+                            h2.positive(ng-show='currentAnswerCorrect()') Richtig!
+                            div(ng-bind-html='currentExplanation()')
+                            button(ng-bind='currentAdvanceLabel()', ng-click='advance()')
 
-                    // goodbye view
-                    .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='appState.view == "goodbye"')
-                        h2 Geschafft!
-                        p Du hast
-                        p
-                            span.cvs-textBlock_bigNumber(ng-bind='appState.answersCorrect')
-                            span
-                                | &nbsp;von&nbsp;
-                            span.cvs-textBlock_bigNumber(ng-bind='content.length')
-                            span
-                                | &nbsp;Bildern
-                        p richtig zugeordnet.
-                        button(ng-click='resetGame()') Nochmal von vorne
+                        // goodbye view
+                        .col-sm-4.cvs-textBlock.cvs-centeredTextBlock(ng-show='appState.view == "goodbye"')
+                            h2 Geschafft!
+                            p Du hast
+                            p
+                                span.cvs-textBlock_bigNumber(ng-bind='appState.answersCorrect')
+                                span
+                                    | &nbsp;von&nbsp;
+                                span.cvs-textBlock_bigNumber(ng-bind='content.length')
+                                span
+                                    | &nbsp;Bildern
+                            p richtig zugeordnet.
+                            button(ng-click='resetGame()') Nochmal von vorne
 
             // navbar start
             .navbar.navbar-default.navbar-fixed-bottom.nvg(ng-controller='navbarController', ng-show='appState.navbarEnabled')

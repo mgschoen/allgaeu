@@ -1,4 +1,4 @@
-app.controller('mainController', [ '$scope', '$log', function($scope, $log){
+app.controller('mainController', [ '$scope', '$log', '$timeout', function($scope, $log, $timeout){
 
   /** * * * * * * * * * * * *
    *  Global app variables  *
@@ -10,6 +10,7 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'currentIndex':       0,
     'fontsLoaded':        false,
     'navbarEnabled':      false,
+    'transitionActive':   false,
     'view':               'welcome' // Valid views are [ 'welcome', 'question', 'answer', 'goodbye' ]
   };
 
@@ -134,9 +135,17 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     var view = $scope.appState.view;
     var currentIndex = $scope.appState.currentIndex;
     var questionsTotal = $scope.content.length;
+
+    // If in welcome view go to first question view
     if (view === 'welcome') {
-      $scope.appState.view = 'question';
-      $scope.appState.navbarEnabled = true;
+      $scope.appState.transitionActive = true;
+      $timeout(function(){
+        $scope.appState.view = 'question';
+        $scope.appState.navbarEnabled = true;
+        $scope.appState.transitionActive = false;
+      }, 300);
+
+    // In last answer view check if all questions have been answered.
     } else if (view === 'answer' && currentIndex === questionsTotal - 1) {
       var firstNotAnsweredIndex = -1;
       for (var i=0; i<$scope.content.length; i++) {
@@ -145,13 +154,22 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
           break;
         }
       }
+
+      // If there are unanswered questions prompt the user. If answer is 'Cancel' go
+      // to first question that was not answered. If answer is 'OK' go to goodbye page.
       if (firstNotAnsweredIndex > -1 &&
         !window.confirm('Du hast noch nicht alle Fragen beantwortet. Wirklich fortfahren?')) {
         $scope.goToQuestion(firstNotAnsweredIndex);
       } else {
-        $scope.appState.view = 'goodbye';
-        $scope.appState.navbarEnabled = false;
+        $scope.appState.transitionActive = true;
+        $timeout(function() {
+          $scope.appState.view = 'goodbye';
+          $scope.appState.navbarEnabled = false;
+          $scope.appState.transitionActive = false;
+        }, 300);
       }
+
+    // In regular answer view go to next question view
     } else if (view === 'answer') {
       $scope.goToQuestion(currentIndex + 1);
     }
@@ -182,8 +200,12 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       return;
     }
     if (index !== $scope.appState.currentIndex) {
-      $scope.appState.currentIndex = index;
-      $scope.appState.view = ($scope.content[index].answered) ? 'answer' : 'question';
+      $scope.appState.transitionActive = true;
+      $timeout(function(){
+        $scope.appState.currentIndex = index;
+        $scope.appState.view = ($scope.content[index].answered) ? 'answer' : 'question';
+        $scope.appState.transitionActive = false;
+      }, 300);
     }
   };
 
@@ -211,13 +233,17 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
    * Restarts the game by setting all game logic related values to default
    * */
   $scope.resetGame = function () {
-    $scope.appState.view = 'welcome';
-    $scope.appState.currentIndex = 0;
-    $scope.appState.answersCorrect = 0;
-    for (var i=0; i<$scope.content.length; i++) {
-      $scope.content[i].answered = false;
-      $scope.content[i].answerGiven = null;
-    }
+    $scope.appState.transitionActive = true;
+    $timeout(function(){
+      $scope.appState.view = 'welcome';
+      $scope.appState.currentIndex = 0;
+      $scope.appState.answersCorrect = 0;
+      for (var i=0; i<$scope.content.length; i++) {
+        $scope.content[i].answered = false;
+        $scope.content[i].answerGiven = null;
+      }
+      $scope.appState.transitionActive = false;
+    }, 300);
   };
 
   /**

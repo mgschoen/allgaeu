@@ -16,6 +16,18 @@ app.controller('canvasController', ['$scope', '$log', 'preloader', function($sco
   };
 
   /**
+   * Returns blurring class if transition is currently active, otherwise no class
+   * @returns {*} - CSS class
+   */
+  $scope.transitionClass = function(){
+    if ($scope.appState.transitionActive) {
+      return 'app-container_canvas-blur';
+    } else {
+      return '';
+    }
+  };
+
+  /**
    * Returns the explanation string of the currently active question
    * @returns {string}
    */

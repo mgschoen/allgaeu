@@ -6,14 +6,12 @@ app.controller('navbarController', [ '$scope', '$log', 'preloader', function($sc
    */
   $scope.navbarImageLazyPreload = function(imgObject) {
     if (!imgObject.thumb.loaded && !imgObject.thumb.loading) {
-      $log.log('Loading ' + imgObject.thumb.url + '...');
       imgObject.thumb.loading = true;
       preloader.preloadImages([imgObject.thumb.url])
         .then(function(){
           imgObject.thumb.loaded = true;
           imgObject.thumb.loading = false;
           $scope.appState.imagesLoading -= 1;
-          $log.log('Done loading ' + imgObject.thumb.url);
         });
     }
   };

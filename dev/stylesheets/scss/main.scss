@@ -51,6 +51,15 @@ $fontfam-serif:         Times, serif;
     font-size: $font-normal;
     margin-top: 20px;
     padding: 35px;
+
+    &_canvas {
+      opacity: 1.0;
+      transition: opacity 0.3s;
+
+      &-blur {
+        opacity: 0.0;
+      }
+    }
   }
 
   &-footer {
