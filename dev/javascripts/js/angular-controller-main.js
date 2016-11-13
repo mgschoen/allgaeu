@@ -9,7 +9,6 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     'answersCorrect':     0,
     'currentIndex':       0,
     'fontsLoaded':        false,
-    'navbarImagesLoaded': false,
     'navbarEnabled':      false,
     'view':               'welcome' // Valid views are [ 'welcome', 'question', 'answer', 'goodbye' ]
   };
@@ -21,8 +20,10 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'answerGiven': null,
       'explanation': '<p>Hier kommt eine kurze Erklärung des Bildes in HTML-Form. Dieses Bild ist definitv <b>not Allgäu</b>.</p>',
       'img': {
-        'caption':   'Lorem ipsum dolor sit amet',
-        'credit':    'Julia Buchmaier',
+        'meta': {
+          'caption':   'Von wegen Allgäu: Das hier ist firgendwo aus den U-S-A!',
+          'credit':    'Julia Buchmaier',
+        },
         'src': {
           'loaded':  false,
           'loading': false,
@@ -43,8 +44,10 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'answerGiven': null,
       'explanation': '<p>Das ist ein Test mit einem zweiten Content.</p>',
       'img': {
-        'caption':   'Lorem ipsum dolor sit amet',
-        'credit':    'Julia Buchmaier',
+        'meta': {
+          'caption':   'Allgäu? Wer\'s glaubt wird selig! Wieder sind wir in Amerika.',
+          'credit':    'Julia Buchmaier',
+        },
         'src': {
           'loaded':  false,
           'loading': false,
@@ -65,8 +68,10 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
       'answerGiven': null,
       'explanation': '<p>This picture was SHOT by the author.</p>',
       'img': {
-        'caption':   'Lorem ipsum dolor sit amet',
-        'credit':    'Mike Milligan',
+        'meta': {
+          'caption':   'Lorem ipsum dolor sit amet',
+          'credit':    'Mike Milligan',
+        },
         'src': {
           'loaded':  false,
           'loading': false,
@@ -87,8 +92,10 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
   // Information about the goodbye page
   $scope.goodbye = {
     'img': {
-      'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
-      'credit':    'Flodur63 / Wikimedia Commons',
+      'meta': {
+        'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
+        'credit':    'Flodur63 / Wikimedia Commons',
+      },
       'src': {
         'loaded':  false,
         'loading': false,
@@ -100,8 +107,10 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
   // Information about the welcome page
   $scope.welcome = {
     'img': {
-      'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
-      'credit':    'Flodur63 / Wikimedia Commons',
+      'meta': {
+        'caption':   'Definitiv Allgäu: Viehscheid in Bad Hindelang.',
+        'credit':    'Flodur63 / Wikimedia Commons',
+      },
       'src': {
         'loaded':  false,
         'loading': false,
@@ -211,10 +220,15 @@ app.controller('mainController', [ '$scope', '$log', function($scope, $log){
     }
   };
 
+  /**
+   * Trigger webfont loader
+   */
+  console.log(WebFont.load);
   WebFont.load({
     google: {
       families: ['Jaldi:400,700', 'Walter Turncoat']
     },
+    /** Load success */
     active: function(){
       $scope.$apply(function(){
         $scope.appState.fontsLoaded = true;

@@ -28,9 +28,9 @@ html(ng-app='allgaeu')
                             img.img-responsive(src='/images/allgaeu-load-img.svg', ng-hide='currentImage().src.loaded')
                             img.img-responsive(ng-src='{{ currentImage().src.url }}', ng-show='currentImage().src.loaded')
                         .row.cvs-imageBlock_imageMeta
-                            span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImage().caption')
-                            span.col-sm-4.cvs-imageBlock_imageCredit
-                                | Foto: {{ currentImage().credit }}
+                            span.col-sm-8.cvs-imageBlock_imageCaption(ng-bind='currentImageMeta().caption', ng-class='currentImageMeta().captionCssClass')
+                            span.col-sm-4.cvs-imageBlock_imageCredit(ng-class='currentImageMeta().creditCssClass')
+                                | Foto: {{ currentImageMeta().credit }}
 
                     // welcome view
                     .col-sm-4.cvs-textBlock(ng-show='appState.view == "welcome"')
@@ -89,7 +89,7 @@ html(ng-app='allgaeu')
         script(src='/plugins/angular/angular-core-sanitize.min.js')
         script(src='/javascripts/allgaeu.min.js')
         // debugging stuff
-        .container
+        //.container
             pre
                 h4 appState
                 p fontsLoaded:&nbsp;

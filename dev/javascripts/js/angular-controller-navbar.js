@@ -1,5 +1,9 @@
 app.controller('navbarController', [ '$scope', '$log', 'preloader', function($scope, $log, preloader){
 
+  /**
+   * Loads the thumb derivate of an image asynchroniously in the background
+   * @param imgObject - image Object as specified in $scope.content
+   */
   $scope.navbarImageLazyPreload = function(imgObject) {
     if (!imgObject.thumb.loaded && !imgObject.thumb.loading) {
       $log.log('Loading ' + imgObject.thumb.url + '...');
@@ -65,6 +69,9 @@ app.controller('navbarController', [ '$scope', '$log', 'preloader', function($sc
     }
   };
 
+  /**
+   * Watch for changes in appState.navbarEnabled flag
+   */
   $scope.$watch('appState.navbarEnabled', function(){
     if ($scope.appState.navbarEnabled) {
       for (var i=0; i<$scope.content.length; i++) {

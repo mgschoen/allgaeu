@@ -22,7 +22,7 @@
     &_imageCaption {
       font-size: $font-small;
       padding: 0;
-      transition: color 1s, text-shadow 1s;
+      //transition: color 0.5s, text-shadow 0.5s;
 
       &-blurred {
         color: transparent;
@@ -37,7 +37,7 @@
       padding: 0;
       text-align: right;
       text-transform: uppercase;
-      transition: color 1s, text-shadow 1s;
+      //transition: color 0.5s, text-shadow 0.5s;
 
       &-blurred {
         color: transparent;
